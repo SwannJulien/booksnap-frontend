@@ -1,4 +1,5 @@
 import { LitElement, html } from 'lit';
+import { fetchBookByIsbn } from './api/books.js';
 import { myComponentStyles } from './styles/booksnap-frontend-styles.js';
 
 class BooksnapFrontend extends LitElement {
@@ -18,7 +19,7 @@ class BooksnapFrontend extends LitElement {
     this.requestUpdate();
   }
 
-  handleButtonClick() {
+  async handleButtonClick() {
     const isbn = this.inputText.trim();
 
     if (!isbn) {
@@ -26,19 +27,13 @@ class BooksnapFrontend extends LitElement {
       return;
     }
 
-    fetch(
-      `https://openlibrary.org/api/books?bibkeys=ISBN:${isbn}&jscmd=data&format=json`,
-    )
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        this.doSomethingWithText(JSON.stringify(data, null, 2));
-      })
-      .catch(alert('Failed to fetch data. Check the console for details.'));
+    try {
+      const data = await fetchBookByIsbn(isbn);
+      this.doSomethingWithText(JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.error(error);
+      alert('Failed to fetch data. Check the console for details.');
+    }
   }
 
   // eslint-disable-next-line class-methods-use-this
