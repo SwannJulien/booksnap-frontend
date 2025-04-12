@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const myComponentStyles = css`
+export const booksnapAppStyles = css`
   :host {
     min-height: 100vh;
     display: flex;

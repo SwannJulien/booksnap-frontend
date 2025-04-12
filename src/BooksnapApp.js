@@ -1,8 +1,8 @@
 import { LitElement, html } from 'lit';
 import { fetchBookByIsbn } from './api/books.js';
-import { myComponentStyles } from './styles/booksnap-frontend-styles.js';
+import { booksnapAppStyles } from './styles/BooksnapAppStyles.js';
 
-class BooksnapFrontend extends LitElement {
+class BooksnapApp extends LitElement {
   static properties = {
     inputText: { type: String },
   };
@@ -12,7 +12,7 @@ class BooksnapFrontend extends LitElement {
     this.inputText = '';
   }
 
-  static styles = [myComponentStyles];
+  static styles = [booksnapAppStyles];
 
   handleInputChange(e) {
     this.inputText = e.target.value;
@@ -55,4 +55,4 @@ class BooksnapFrontend extends LitElement {
   }
 }
 
-customElements.define('booksnap-frontend', BooksnapFrontend);
+customElements.define('booksnap-app', BooksnapApp);
