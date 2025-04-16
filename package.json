@@ -1,8 +1,8 @@
 {
-  "name": "booksnap-frontend",
+  "name": "booksnap-app",
   "description": "Webcomponent booksnap-frontend following open-wc recommendations",
   "license": "MIT",
-  "author": "booksnap-frontend",
+  "author": "booksnap-app",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -13,6 +13,7 @@
     "start": "web-dev-server"
   },
   "dependencies": {
+    "@zxing/browser": "^0.1.5",
     "lit": "^3.1.4"
   },
   "devDependencies": {

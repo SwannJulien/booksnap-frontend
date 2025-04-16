@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import { fetchBookByIsbn } from './api/books.js';
-import { booksnapAppStyles } from './styles/BooksnapAppStyles.js';
+import { booksnapApp } from './BooksnapApp-styles.js';
+import './components/barecode-Scanner/BarecodeScanner.js';
 
 class BooksnapApp extends LitElement {
   static properties = {
@@ -12,7 +13,7 @@ class BooksnapApp extends LitElement {
     this.inputText = '';
   }
 
-  static styles = [booksnapAppStyles];
+  static styles = [booksnapApp];
 
   handleInputChange(e) {
     this.inputText = e.target.value;
@@ -51,6 +52,7 @@ class BooksnapApp extends LitElement {
         placeholder="Enter some text..."
       />
       <button @click=${this.handleButtonClick}>Submit</button>
+      <barecode-scanner></barecode-scanner>
     `;
   }
 }

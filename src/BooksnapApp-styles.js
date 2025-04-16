@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const booksnapAppStyles = css`
+export const booksnapApp = css`
   :host {
     min-height: 100vh;
     display: flex;
@@ -13,5 +13,14 @@ export const booksnapAppStyles = css`
     margin: 0 auto;
     text-align: center;
     background-color: var(--booksnap-frontend-background-color);
+  }
+
+  #camera video {
+    width: 100%;
+    max-width: 640px;
+  }
+
+  #camera {
+    width: 100%;
   }
 `;
