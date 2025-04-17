@@ -35,6 +35,9 @@ export class BarecodeScanner extends LitElement {
       const constraints = {
         video: {
           facingMode: { ideal: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          advanced: [{ focusMode: 'continuous' }],
         },
       };
 
