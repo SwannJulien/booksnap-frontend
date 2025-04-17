@@ -1,58 +1,37 @@
 import { LitElement, html } from 'lit';
-import { fetchBookByIsbn } from './api/books.js';
+
 import { booksnapApp } from './BooksnapApp-styles.js';
 import './components/barecode-Scanner/BarecodeScanner.js';
+import './components/display-book/DisplayBook.js';
+import './components/search-book/SearchBook.js';
 
 class BooksnapApp extends LitElement {
   static properties = {
     inputText: { type: String },
+    book: { type: Object },
   };
 
   constructor() {
     super();
     this.inputText = '';
+    this.book = null;
   }
 
   static styles = [booksnapApp];
 
-  handleInputChange(e) {
-    this.inputText = e.target.value;
-    this.requestUpdate();
-  }
-
-  async handleButtonClick() {
-    const isbn = this.inputText.trim();
-
-    if (!isbn) {
-      alert('Please enter an ISBN.');
-      return;
-    }
-
-    try {
-      const data = await fetchBookByIsbn(isbn);
-      this.doSomethingWithText(JSON.stringify(data, null, 2));
-    } catch (error) {
-      console.error(error);
-      alert('Failed to fetch data. Check the console for details.');
-    }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  doSomethingWithText(data) {
-    console.log(data);
+  handleGetBook(event) {
+    this.book = event.detail.book;
+    console.log(this.book);
   }
 
   render() {
     return html`
-      <h1>Hello world!</h1>
-      <input
-        type="text"
-        .value=${this.inputText}
-        @input=${this.handleInputChange}
-        placeholder="Enter some text..."
-      />
-      <button @click=${this.handleButtonClick}>Submit</button>
-      <barecode-scanner></barecode-scanner>
+      <search-book @getBook=${this.handleGetBook}></search-book>
+      ${this.book
+        ? html` <display-book
+            .book=${Object.values(this.book)[0]}
+          ></display-book>`
+        : html``}
     `;
   }
 }

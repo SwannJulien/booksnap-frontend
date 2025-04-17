@@ -17,7 +17,7 @@ export class BarecodeScanner extends LitElement {
     this.codeReader = new BrowserMultiFormatReader();
     this.hideVideo = true;
     this.isScanning = false;
-    this.videoStream = null; // Track stream for manual stop
+    this.videoStream = null;
   }
 
   async toggleScanner() {
@@ -50,6 +50,13 @@ export class BarecodeScanner extends LitElement {
         (result, err, control) => {
           if (result) {
             this.result = result.getText();
+            this.dispatchEvent(
+              new CustomEvent('sendBarecode', {
+                bubbles: true,
+                composed: true,
+                detail: { code: this.result },
+              }),
+            );
             control.stop();
             this.stopScanner();
           }
@@ -86,7 +93,6 @@ export class BarecodeScanner extends LitElement {
       <button @click=${this.toggleScanner}>
         ${this.isScanning ? 'Stop Scanning' : 'Start Scanning'}
       </button>
-      <div>${this.result}</div>
     `;
   }
 }
