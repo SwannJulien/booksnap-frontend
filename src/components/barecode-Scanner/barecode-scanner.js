@@ -1,6 +1,6 @@
 import { BrowserMultiFormatReader } from '@zxing/browser';
 import { LitElement, html } from 'lit';
-import { barecodeScanner } from './BarecodeScanner-styles.js';
+import { barecodeScanner } from './barecode-scanner-styles.js';
 
 export class BarecodeScanner extends LitElement {
   static styles = [barecodeScanner];
@@ -35,6 +35,9 @@ export class BarecodeScanner extends LitElement {
       const constraints = {
         video: {
           facingMode: { ideal: 'environment' },
+          width: { ideal: 1280 },
+          height: { ideal: 720 },
+          advanced: [{ focusMode: 'continuous' }],
         },
       };
 
