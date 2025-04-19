@@ -93,4 +93,60 @@ export const booksnapApp = css`
   #toggle-btn:hover {
     background-color: #3b3b3b;
   }
+
+  @media (max-width: 768px) {
+    :host {
+      grid-template-columns: 1fr;
+    }
+    main {
+      padding: 2em 1em 60px 1em;
+    }
+
+    #sidebar {
+      height: 100px;
+      width: 100%;
+      border-right: none;
+      border-top: 1px solid #000000;
+      padding: 0;
+      position: fixed;
+      top: unset;
+      bottom: 0;
+      display: flex;
+      justify-content: center;
+
+      > ul {
+        margin: 0;
+        padding: 0;
+        display: grid;
+        grid-auto-columns: 60px;
+        grid-auto-flow: column;
+        align-items: center;
+        overflow-x: scroll;
+      }
+
+      ul li {
+        height: 100%;
+      }
+
+      ul li span,
+      ul li:first-child {
+        display: none;
+      }
+
+      ul a {
+        width: 60px;
+        height: 60px;
+        padding: 0;
+        border-radius: 0;
+        justify-content: center;
+      }
+
+      a {
+        box-sizing: border-box;
+        padding: 1em;
+        width: auto;
+        justify-content: center;
+      }
+    }
+  }
 `;
