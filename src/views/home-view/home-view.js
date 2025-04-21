@@ -7,12 +7,11 @@ class HomeView extends LitElement {
   static styles = [homeView];
 
   render() {
-    return html` 
-      <h1>Welcome to BookSnap</h1>
-      <nav>
-        <a href="/search">Search Book</a></li>
-      </nav>
-      `;
+    return html`
+      <section>
+        <h1>Welcome to BookSnap</h1>
+      </section>
+    `;
   }
 }
 
