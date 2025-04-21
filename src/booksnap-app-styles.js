@@ -1,9 +1,9 @@
 import { css } from 'lit';
 
+// TODO: fix the main content that scroll at the same time as the sidebar
 export const booksnapApp = css`
   :host {
     min-height: 100vh;
-    font-size: calc(10px + 2vmin);
     color: #1a2b42;
     max-width: 960px;
     display: grid;
@@ -13,9 +13,9 @@ export const booksnapApp = css`
 
   #sidebar {
     box-sizing: border-box;
-    height: 100vh;
-    width: 300px;
-    padding: 5px 1em;
+    height: 100%;
+    width: clamp(200px, 20vw, 250px);
+    /* padding: 5px 1em; */
     border-right: 1px solid #000000;
     background-color: #2c2c2c;
     color: #ededed;
@@ -24,7 +24,7 @@ export const booksnapApp = css`
     top: 0;
     align-self: start;
     transition: 300ms ease-in-out;
-    overflow: hidden;
+    overflow-x: hidden;
     text-wrap: nowrap;
   }
 
@@ -94,7 +94,7 @@ export const booksnapApp = css`
     background-color: #3b3b3b;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 48rem) {
     :host {
       grid-template-columns: 1fr;
     }
@@ -103,7 +103,7 @@ export const booksnapApp = css`
     }
 
     #sidebar {
-      height: 100px;
+      height: 60px;
       width: 100%;
       border-right: none;
       border-top: 1px solid #000000;
@@ -122,6 +122,7 @@ export const booksnapApp = css`
         grid-auto-flow: column;
         align-items: center;
         overflow-x: scroll;
+        scrollbar-width: none;
       }
 
       ul li {
