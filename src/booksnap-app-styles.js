@@ -9,13 +9,19 @@ export const booksnapApp = css`
     display: grid;
     grid-template-columns: auto 1fr;
     gap: 2em;
+    overflow: hidden;
+  }
+
+  main {
+    overflow: auto;
+    height: 100vh;
   }
 
   #sidebar {
     box-sizing: border-box;
-    height: 100%;
+    height: 100vh;
+
     width: clamp(200px, 20vw, 250px);
-    /* padding: 5px 1em; */
     border-right: 1px solid #000000;
     background-color: #2c2c2c;
     color: #ededed;
@@ -25,6 +31,7 @@ export const booksnapApp = css`
     align-self: start;
     transition: 300ms ease-in-out;
     overflow-x: hidden;
+    overflow-y: auto;
     text-wrap: nowrap;
   }
 
@@ -40,6 +47,9 @@ export const booksnapApp = css`
   #sidebar ul {
     list-style: none;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
   }
 
   #sidebar ul > li:first-child {
@@ -49,6 +59,13 @@ export const booksnapApp = css`
     .logo {
       font-weight: 600;
     }
+  }
+
+  #sidebar ul li:nth-child(7) {
+    margin-top: auto;
+  }
+  #sidebar ul li:nth-child(8) {
+    padding-bottom: 16px;
   }
 
   #sidebar ul li.active a {
@@ -122,7 +139,7 @@ export const booksnapApp = css`
         grid-auto-flow: column;
         align-items: center;
         overflow-x: scroll;
-        scrollbar-width: none;
+        overflow-y: hidden;
       }
 
       ul li {
