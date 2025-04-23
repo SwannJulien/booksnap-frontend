@@ -10,12 +10,14 @@ export class SearchBook extends LitElement {
   static properties = {
     book: { type: Object },
     isbn: { type: String },
+    activeTab: { type: String },
   };
 
   constructor() {
     super();
     this.book = null;
     this.isbn = '';
+    this.activeTab = 'scan';
   }
 
   async handleBareCodeScanned(event) {
@@ -31,26 +33,92 @@ export class SearchBook extends LitElement {
 
   render() {
     return html`
-      <div class="container">
-        <div class="left-panel">
-          <h2>Use your device to scan the book’s barcode</h2>
-          <barecode-scanner
-            @sendBarecode=${this.handleBareCodeScanned}
-          ></barecode-scanner>
-        </div>
-        <div class="right-panel">
-          <h2>Type the ISBN here</h2>
-          <div class="input-field">
-            <input
-              type="text"
-              id="isbnInput"
-              placeholder="Enter ISBN here"
-              .value=${this.isbn}
-              @input=${this.handleInputChange}
-            />
-            <button @click=${this.handleBareCodeScanned}>Submit ISBN</button>
-          </div>
-        </div>
+      <div class="tabs">
+        <button
+          class=${this.activeTab === 'scan' ? 'active' : ''}
+          @click=${() => {
+            this.activeTab = 'scan';
+          }}
+        >
+          Scan Barcode
+        </button>
+        <button
+          class=${this.activeTab === 'isbn' ? 'active' : ''}
+          @click=${() => {
+            this.activeTab = 'isbn';
+          }}
+        >
+          Enter ISBN
+        </button>
+        <button
+          class=${this.activeTab === 'form' ? 'active' : ''}
+          @click=${() => {
+            this.activeTab = 'form';
+          }}
+        >
+          Fill Form
+        </button>
+      </div>
+
+      <div class="tab-content">
+        ${this.activeTab === 'scan'
+          ? html`
+              <div class="scan-tab">
+                <h2>Use your device to scan the book’s barcode</h2>
+                <barecode-scanner
+                  @sendBarecode=${this.handleBareCodeScanned}
+                ></barecode-scanner>
+              </div>
+            `
+          : ''}
+        ${this.activeTab === 'isbn'
+          ? html`
+              <div class="isbn-tab">
+                <h2>Type the ISBN here</h2>
+                <div class="input-field">
+                  <input
+                    type="text"
+                    id="isbnInput"
+                    placeholder="Enter ISBN here"
+                    .value=${this.isbn}
+                    @input=${this.handleInputChange}
+                  />
+                  <button
+                    class="button-submit"
+                    @click=${this.handleBareCodeScanned}
+                  >
+                    Submit ISBN
+                  </button>
+                </div>
+              </div>
+            `
+          : ''}
+        ${this.activeTab === 'form'
+          ? html`
+              <div class="form-tab">
+                <h2>Fill in the book details</h2>
+                <form @submit=${this.handleFormSubmit}>
+                  <label>
+                    Title:
+                    <input type="text" name="title" required />
+                  </label>
+                  <label>
+                    Author:
+                    <input type="text" name="author" required />
+                  </label>
+                  <label>
+                    Publish Date:
+                    <input type="date" name="publishDate" />
+                  </label>
+                  <label>
+                    ISBN:
+                    <input type="text" name="isbn" />
+                  </label>
+                  <button class="button-submit" type="submit">Submit</button>
+                </form>
+              </div>
+            `
+          : ''}
       </div>
     `;
   }

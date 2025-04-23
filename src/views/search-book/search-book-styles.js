@@ -1,47 +1,70 @@
 import { css } from 'lit';
 
 export const searchBook = css`
-  .container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    text-align: center;
-    height: 40vh;
+  :host {
+    display: block;
+    max-width: 1200px;
   }
 
-  .left-panel,
-  .right-panel {
+  .tabs {
     display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    padding: 2rem;
+    justify-content: flex-start;
   }
 
-  .right-panel {
-    border-left: solid black 1px;
+  .tabs button {
+    padding: 0.5em 1em;
+    border: none;
+    background-color: #2c2c2c;
+    color: var(--clr-bkg);
+    cursor: pointer;
+    font-size: var(--step-0);
+    border: 1px solid #ccc;
+    border-bottom: none;
+    border-radius: 0.5em 0.5em 0 0;
+  }
+
+  .tabs button.active {
+    background: var(--clr-accent);
+    color: #ffffff;
+    font-weight: bold;
+  }
+
+  .tab-content {
+    padding: 1em;
+    border: 1px solid #ccc;
+    background: white;
+  }
+
+  .button-submit {
+    background-color: var(--clr-accent);
+    width: 9rem;
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    /* border-radius: 0.5em; */
+    cursor: pointer;
+    font-size: var(--step-0);
   }
 
   .input-field {
-    width: 100%;
     display: flex;
-    gap: 0.5rem;
-    justify-content: center;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+  }
+
+  .input-field input,
+  form input {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    font-size: var(--step-0);
   }
 
   @media (max-width: 768px) {
-    .container {
-      grid-template-columns: 1fr;
-      height: auto;
-    }
-
-    .right-panel {
-      border-left: none;
-      border-top: solid black 1px;
-    }
-
-    .left-panel,
-    .right-panel {
-      padding: 1rem;
-    }
   }
 `;

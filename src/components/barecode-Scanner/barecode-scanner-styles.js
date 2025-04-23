@@ -8,4 +8,13 @@ export const barecodeScanner = css`
     border: 2px solid #ccc;
     border-radius: 8px;
   }
+
+  button {
+    background-color: var(--clr-accent);
+    color: white;
+    border: none;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    font-size: var(--step-0);
+  }
 `;

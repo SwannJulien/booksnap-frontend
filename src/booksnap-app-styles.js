@@ -4,10 +4,10 @@ import { css } from 'lit';
 export const booksnapApp = css`
   :host {
     min-height: 100vh;
-    color: #1a2b42;
-    max-width: 960px;
+    color: var(--clr-font);
     display: grid;
     grid-template-columns: auto 1fr;
+    padding-right: 2em;
     gap: 2em;
     overflow: hidden;
   }
@@ -15,16 +15,17 @@ export const booksnapApp = css`
   main {
     overflow: auto;
     height: 100vh;
+    padding-top: 20px;
   }
 
   #sidebar {
     box-sizing: border-box;
-    height: 100vh;
-
+    height: 100%;
+    padding-top: 20px;
     width: clamp(200px, 20vw, 250px);
     border-right: 1px solid #000000;
-    background-color: #2c2c2c;
-    color: #ededed;
+    background-color: var(--clr-nav);
+    color: var(--clr-bkg);
 
     position: sticky;
     top: 0;
@@ -50,6 +51,7 @@ export const booksnapApp = css`
     display: flex;
     flex-direction: column;
     height: 100%;
+    margin: 0;
   }
 
   #sidebar ul > li:first-child {
@@ -69,10 +71,10 @@ export const booksnapApp = css`
   }
 
   #sidebar ul li.active a {
-    color: #85e0fc;
+    color: var(--clr-nav-active);
 
     svg {
-      fill: #85e0fc;
+      fill: var(--clr-nav-active);
     }
   }
 
@@ -80,7 +82,7 @@ export const booksnapApp = css`
     width: 30px;
     height: 30px;
     flex-shrink: 0;
-    fill: #ededed;
+    fill: var(--clr-bkg);
   }
 
   #sidebar a,
@@ -88,14 +90,14 @@ export const booksnapApp = css`
     border-radius: 0.5em;
     padding: 0.85em;
     text-decoration: none;
-    color: #ededed;
+    color: var(--clr-bkg);
     display: flex;
     align-items: center;
     gap: 1em;
   }
 
   #sidebar a:hover {
-    background-color: #3b3b3b;
+    background-color: var(--clr-nav-hover);
   }
 
   #toggle-btn {
@@ -114,6 +116,7 @@ export const booksnapApp = css`
   @media (max-width: 48rem) {
     :host {
       grid-template-columns: 1fr;
+      padding-right: 0;
     }
     main {
       padding: 2em 1em 60px 1em;
@@ -149,6 +152,10 @@ export const booksnapApp = css`
       ul li span,
       ul li:first-child {
         display: none;
+      }
+
+      ul li:nth-child(8) {
+        padding-bottom: 0;
       }
 
       ul a {
