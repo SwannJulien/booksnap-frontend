@@ -1,6 +1,5 @@
 import { css } from 'lit';
 
-// TODO: fix the main content that scroll at the same time as the sidebar
 export const booksnapApp = css`
   :host {
     min-height: 100vh;
@@ -24,8 +23,8 @@ export const booksnapApp = css`
     padding-top: 20px;
     width: clamp(200px, 20vw, 250px);
     border-right: 1px solid #000000;
-    background-color: var(--clr-nav);
-    color: var(--clr-bkg);
+    background-color: var(--clr-dark);
+    color: var(--clr-light);
 
     position: sticky;
     top: 0;
@@ -71,10 +70,10 @@ export const booksnapApp = css`
   }
 
   #sidebar ul li.active a {
-    color: var(--clr-nav-active);
+    color: var(--clr-accent);
 
     svg {
-      fill: var(--clr-nav-active);
+      fill: var(--clr-accent);
     }
   }
 
@@ -82,7 +81,7 @@ export const booksnapApp = css`
     width: 30px;
     height: 30px;
     flex-shrink: 0;
-    fill: var(--clr-bkg);
+    fill: var(--clr-light);
   }
 
   #sidebar a,
@@ -90,7 +89,7 @@ export const booksnapApp = css`
     border-radius: 0.5em;
     padding: 0.85em;
     text-decoration: none;
-    color: var(--clr-bkg);
+    color: var(--clr-light);
     display: flex;
     align-items: center;
     gap: 1em;
@@ -110,7 +109,7 @@ export const booksnapApp = css`
   }
 
   #toggle-btn:hover {
-    background-color: #3b3b3b;
+    background-color: var(--clr-nav-hover);
   }
 
   @media (max-width: 48rem) {

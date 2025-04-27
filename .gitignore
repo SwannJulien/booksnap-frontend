@@ -25,3 +25,6 @@ custom-elements.json
 
 # assets
 /assets/icons
+
+# replit
+.replit

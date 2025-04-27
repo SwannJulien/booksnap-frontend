@@ -9,23 +9,17 @@ export const searchBook = css`
   .tabs {
     display: flex;
     justify-content: flex-start;
+    border: none;
   }
 
   .tabs button {
-    padding: 0.5em 1em;
-    border: none;
-    background-color: #2c2c2c;
-    color: var(--clr-bkg);
+    padding: 1em;
     cursor: pointer;
     font-size: var(--step-0);
-    border: 1px solid #ccc;
-    border-bottom: none;
-    border-radius: 0.5em 0.5em 0 0;
   }
 
   .tabs button.active {
-    background: var(--clr-accent);
-    color: #ffffff;
+    border-bottom: 5px solid var(--clr-accent);
     font-weight: bold;
   }
 
@@ -38,12 +32,12 @@ export const searchBook = css`
   .button-submit {
     background-color: var(--clr-accent);
     width: 9rem;
-    color: white;
+    color: var(--clr-font);
     border: none;
     padding: 0.5em 1em;
-    /* border-radius: 0.5em; */
     cursor: pointer;
     font-size: var(--step-0);
+    font-weight: bold;
   }
 
   .input-field {

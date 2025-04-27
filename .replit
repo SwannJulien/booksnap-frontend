@@ -1,0 +1,11 @@
+run = "npm start"
+modules = ["nodejs-20"]
+[nix]
+channel = "stable-24_05"
+
+[deployment]
+run = ["sh", "-c", "npm start"]
+
+[[ports]]
+localPort = 8000
+externalPort = 80

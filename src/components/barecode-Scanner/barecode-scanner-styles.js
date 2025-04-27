@@ -10,11 +10,12 @@ export const barecodeScanner = css`
   }
 
   button {
-    background-color: var(--clr-accent);
-    color: white;
+    background-color: #4fd1c5;
+    color: var(--clr-black);
     border: none;
     padding: 0.5em 1em;
     cursor: pointer;
     font-size: var(--step-0);
+    font-weight: bold;
   }
 `;

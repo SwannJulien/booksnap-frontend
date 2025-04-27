@@ -8,12 +8,11 @@
   --step-4: clamp(2.0736rem, 1.8813rem + 0.9614vw, 2.7466rem);
   --step-5: clamp(2.4883rem, 2.2183rem + 1.3499vw, 3.4332rem);
 
-  --clr-nav: #2c2c2c;
+  --clr-dark: #2c2c2c;
   --clr-nav-hover: #3b3b3b;
   --clr-font: #1a2b42;
-  --clr-nav-active: #85e0fc;
-  --clr-accent: #fc86a8;
-  --clr-bkg: #ededed;
+  --clr-accent: #4FD1C5;
+  --clr-light: #ededed;
 }
 
 html,
@@ -23,7 +22,8 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   font-family: sans-serif;
-  background-color: #ededed;
+  background-color: var(--clr-light);
+  color: var(--clr-font);
 }
 
 body {
