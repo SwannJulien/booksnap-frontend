@@ -12,7 +12,8 @@ class BooksnapApp extends LitElement {
 
   firstUpdated() {
     const router = new Router(this.shadowRoot.querySelector('main'));
-    const listItems = this.shadowRoot.querySelectorAll('nav a');
+    const linkItems = this.shadowRoot.querySelectorAll('nav a');
+    const listItems = this.shadowRoot.querySelectorAll('nav li');
 
     // TODO: find a way to create a function to avoid code duplication on adding the active class
     router.setRoutes([
@@ -20,7 +21,12 @@ class BooksnapApp extends LitElement {
         path: '/',
         component: 'home-view',
         action: () => {
-          listItems.forEach(element => {
+          // First reset all active classes to avoid conflicts when navigating back
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          // Then add the active class to the current list
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/') {
               element.parentElement.classList.add('active');
             }
@@ -32,7 +38,10 @@ class BooksnapApp extends LitElement {
         component: 'search-book',
         action: async () => {
           await import('./views/home-view/home-view.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/search') {
               element.parentElement.classList.add('active');
             }
@@ -44,7 +53,10 @@ class BooksnapApp extends LitElement {
         component: 'display-book',
         action: async () => {
           await import('./views/display-book/display-book.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/book') {
               element.parentElement.classList.add('active');
             }
@@ -56,7 +68,10 @@ class BooksnapApp extends LitElement {
         component: 'catalog-view',
         action: async () => {
           await import('./views/catalog-view/catalog-view.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/catalog') {
               element.parentElement.classList.add('active');
             }
@@ -68,7 +83,10 @@ class BooksnapApp extends LitElement {
         component: 'borrowing-view',
         action: async () => {
           await import('./views/borrowing-view/borrowing-view.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/borrowings') {
               element.parentElement.classList.add('active');
             }
@@ -80,7 +98,10 @@ class BooksnapApp extends LitElement {
         component: 'analytics-view',
         action: async () => {
           await import('./views/analytics-view/analytics-view.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/analytics') {
               element.parentElement.classList.add('active');
             }
@@ -92,7 +113,10 @@ class BooksnapApp extends LitElement {
         component: 'settings-view',
         action: async () => {
           await import('./views/settings-view/settings-view.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/settings') {
               element.parentElement.classList.add('active');
             }
@@ -104,7 +128,10 @@ class BooksnapApp extends LitElement {
         component: 'account-view',
         action: async () => {
           await import('./views/account-view/account-view.js');
-          listItems.forEach(element => {
+          listItems.forEach(item => {
+            item.classList.remove('active');
+          });
+          linkItems.forEach(element => {
             if (element.getAttribute('href') === '/account') {
               element.parentElement.classList.add('active');
             }

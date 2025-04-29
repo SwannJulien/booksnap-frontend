@@ -16,7 +16,7 @@ export const booksnapApp = css`
     height: 100vh;
     padding-top: 20px;
   }
-
+  /* FIXME: le scroll de la barre de nav s'arrête et c'est le scroll de la fenêtre qui prend le relais */
   #sidebar {
     box-sizing: border-box;
     height: 100%;
@@ -44,9 +44,11 @@ export const booksnapApp = css`
     .logo {
       display: none;
     }
-
     ul {
       margin-top: 1rem;
+    }
+    #toggle-btn {
+      padding-right: 0.9rem;
     }
   }
 
@@ -72,7 +74,12 @@ export const booksnapApp = css`
   #sidebar ul li:nth-child(8) {
     margin-bottom: 2rem;
   }
-  /*FIXME: The border-left on the active class make the icon move to the right*/
+
+  #sidebar ul li a {
+    border-left: 2px solid transparent;
+    transition: border-left 0.5s ease;
+  }
+
   #sidebar ul li.active a {
     border-left: 2px solid var(--clr-light);
     color: var(--clr-light);
@@ -187,14 +194,13 @@ export const booksnapApp = css`
         justify-content: center;
       }
     }
-
+    #sidebar ul li a {
+      border-bottom: 4px solid transparent;
+      transition: border-bottom 0.5s ease;
+    }
     #sidebar ul li.active a {
       border-left: none;
       border-bottom: 4px solid var(--clr-light);
-
-      svg {
-        fill: var(--clr-light);
-      }
     }
   }
 `;
