@@ -16,6 +16,5 @@ export const barecodeScanner = css`
     padding: 0.5em 1em;
     cursor: pointer;
     font-size: var(--step-0);
-    font-weight: bold;
   }
 `;

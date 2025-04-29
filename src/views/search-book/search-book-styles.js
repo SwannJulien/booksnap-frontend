@@ -9,13 +9,15 @@ export const searchBook = css`
   .tabs {
     display: flex;
     justify-content: flex-start;
-    border: none;
   }
 
   .tabs button {
     padding: 1em;
     cursor: pointer;
     font-size: var(--step-0);
+    border: none;
+    text-align: left;
+    width: 12rem;
   }
 
   .tabs button.active {
@@ -31,13 +33,12 @@ export const searchBook = css`
 
   .button-submit {
     background-color: var(--clr-accent);
-    width: 9rem;
+    width: 9em;
     color: var(--clr-font);
     border: none;
     padding: 0.5em 1em;
     cursor: pointer;
     font-size: var(--step-0);
-    font-weight: bold;
   }
 
   .input-field {

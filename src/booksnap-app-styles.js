@@ -21,10 +21,9 @@ export const booksnapApp = css`
     box-sizing: border-box;
     height: 100%;
     padding-top: 20px;
-    width: clamp(200px, 20vw, 250px);
+    width: clamp(190px, 15vw, 220px);
     border-right: 1px solid #000000;
     background-color: var(--clr-dark);
-    color: var(--clr-light);
 
     position: sticky;
     top: 0;
@@ -70,10 +69,11 @@ export const booksnapApp = css`
   }
 
   #sidebar ul li.active a {
-    color: var(--clr-accent);
+    border-left: 2px solid var(--clr-light);
+    color: var(--clr-light);
 
     svg {
-      fill: var(--clr-accent);
+      fill: var(--clr-light);
     }
   }
 
@@ -81,22 +81,32 @@ export const booksnapApp = css`
     width: 30px;
     height: 30px;
     flex-shrink: 0;
-    fill: var(--clr-light);
+    fill: var(--clr-light-gray);
   }
 
-  #sidebar a,
-  #sidebar .logo {
-    border-radius: 0.5em;
+  #sidebar a {
     padding: 0.85em;
     text-decoration: none;
-    color: var(--clr-light);
+    color: var(--clr-light-gray);
     display: flex;
     align-items: center;
     gap: 1em;
   }
 
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1em;
+    padding: 0.85em;
+    color: var(--clr-accent);
+  }
+
   #sidebar a:hover {
-    background-color: var(--clr-nav-hover);
+    color: var(--clr-light);
+
+    svg {
+      fill: var(--clr-light);
+    }
   }
 
   #toggle-btn {
@@ -108,8 +118,8 @@ export const booksnapApp = css`
     cursor: pointer;
   }
 
-  #toggle-btn:hover {
-    background-color: var(--clr-nav-hover);
+  #toggle-btn svg:hover {
+    fill: var(--clr-light);
   }
 
   @media (max-width: 48rem) {
@@ -170,6 +180,15 @@ export const booksnapApp = css`
         padding: 1em;
         width: auto;
         justify-content: center;
+      }
+    }
+
+    #sidebar ul li.active a {
+      border-left: none;
+      border-bottom: 4px solid var(--clr-light);
+
+      svg {
+        fill: var(--clr-light);
       }
     }
   }

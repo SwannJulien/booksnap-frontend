@@ -12,17 +12,30 @@ class BooksnapApp extends LitElement {
 
   firstUpdated() {
     const router = new Router(this.shadowRoot.querySelector('main'));
+    const listItems = this.shadowRoot.querySelectorAll('nav a');
 
     router.setRoutes([
       {
         path: '/',
         component: 'home-view',
+        action: () => {
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/') {
+              element.parentElement.classList.add('active');
+            }
+          });
+        },
       },
       {
         path: '/search',
         component: 'search-book',
         action: async () => {
           await import('./views/home-view/home-view.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/search') {
+              element.parentElement.classList.add('active');
+            }
+          });
         },
       },
       {
@@ -30,6 +43,11 @@ class BooksnapApp extends LitElement {
         component: 'display-book',
         action: async () => {
           await import('./views/display-book/display-book.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/book') {
+              element.parentElement.classList.add('active');
+            }
+          });
         },
       },
       {
@@ -37,6 +55,11 @@ class BooksnapApp extends LitElement {
         component: 'catalog-view',
         action: async () => {
           await import('./views/catalog-view/catalog-view.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/catalog') {
+              element.parentElement.classList.add('active');
+            }
+          });
         },
       },
       {
@@ -44,6 +67,11 @@ class BooksnapApp extends LitElement {
         component: 'borrowing-view',
         action: async () => {
           await import('./views/borrowing-view/borrowing-view.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/borrowings') {
+              element.parentElement.classList.add('active');
+            }
+          });
         },
       },
       {
@@ -51,6 +79,11 @@ class BooksnapApp extends LitElement {
         component: 'analytics-view',
         action: async () => {
           await import('./views/analytics-view/analytics-view.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/analytics') {
+              element.parentElement.classList.add('active');
+            }
+          });
         },
       },
       {
@@ -58,6 +91,11 @@ class BooksnapApp extends LitElement {
         component: 'settings-view',
         action: async () => {
           await import('./views/settings-view/settings-view.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/settings') {
+              element.parentElement.classList.add('active');
+            }
+          });
         },
       },
       {
@@ -69,7 +107,14 @@ class BooksnapApp extends LitElement {
 
   toggleSidebar() {
     const sidebar = this.shadowRoot.getElementById('sidebar');
+    // Toggle class close if toggle-btn is pressed
     sidebar.classList.toggle('close');
+    // Remove class close if screen size < 48em
+    window.addEventListener('resize', () => {
+      if (window.matchMedia(`(max-width: 48em)`).matches) {
+        sidebar.classList.remove('close');
+      }
+    });
   }
 
   toggleActive(event) {
@@ -78,6 +123,18 @@ class BooksnapApp extends LitElement {
       item.classList.remove('active');
     });
     event.currentTarget.closest('li').classList.add('active');
+
+    // switch (window.location.pathname) {
+    //   case '/catalog':
+    //     console.log('inside pathname catalog');
+    //     break;
+    //   default:
+    //     break;
+    // }
+
+    // if (document.URL.indexOf('catalog') >= 0) {
+    //   console.log('Hello catalog');
+    // }
   }
 
   // TODO: change icon and title: +1 Add book and maybe put the scanning icon for borrowings

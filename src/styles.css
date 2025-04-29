@@ -9,9 +9,9 @@
   --step-5: clamp(2.4883rem, 2.2183rem + 1.3499vw, 3.4332rem);
 
   --clr-dark: #2c2c2c;
-  --clr-nav-hover: #3b3b3b;
+  --clr-light-gray: #7e7e7e;
   --clr-font: #1a2b42;
-  --clr-accent: #4FD1C5;
+  --clr-accent: #4fd1c5;
   --clr-light: #ededed;
 }
 
