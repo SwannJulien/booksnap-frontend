@@ -14,6 +14,7 @@ class BooksnapApp extends LitElement {
     const router = new Router(this.shadowRoot.querySelector('main'));
     const listItems = this.shadowRoot.querySelectorAll('nav a');
 
+    // TODO: find a way to create a function to avoid code duplication on adding the active class
     router.setRoutes([
       {
         path: '/',
@@ -99,6 +100,18 @@ class BooksnapApp extends LitElement {
         },
       },
       {
+        path: '/account',
+        component: 'account-view',
+        action: async () => {
+          await import('./views/account-view/account-view.js');
+          listItems.forEach(element => {
+            if (element.getAttribute('href') === '/account') {
+              element.parentElement.classList.add('active');
+            }
+          });
+        },
+      },
+      {
         path: '(.*)',
         redirect: '/',
       },
@@ -107,9 +120,9 @@ class BooksnapApp extends LitElement {
 
   toggleSidebar() {
     const sidebar = this.shadowRoot.getElementById('sidebar');
-    // Toggle class close if toggle-btn is pressed
+    // Toggle class .close if toggle-btn is pressed
     sidebar.classList.toggle('close');
-    // Remove class close if screen size < 48em
+    // Remove class .close if screen size < 48em
     window.addEventListener('resize', () => {
       if (window.matchMedia(`(max-width: 48em)`).matches) {
         sidebar.classList.remove('close');
@@ -123,18 +136,6 @@ class BooksnapApp extends LitElement {
       item.classList.remove('active');
     });
     event.currentTarget.closest('li').classList.add('active');
-
-    // switch (window.location.pathname) {
-    //   case '/catalog':
-    //     console.log('inside pathname catalog');
-    //     break;
-    //   default:
-    //     break;
-    // }
-
-    // if (document.URL.indexOf('catalog') >= 0) {
-    //   console.log('Hello catalog');
-    // }
   }
 
   // TODO: change icon and title: +1 Add book and maybe put the scanning icon for borrowings

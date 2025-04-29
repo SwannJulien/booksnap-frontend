@@ -21,7 +21,7 @@ export const booksnapApp = css`
     box-sizing: border-box;
     height: 100%;
     padding-top: 20px;
-    width: clamp(190px, 15vw, 220px);
+    width: clamp(12rem, 25vw, 16rem);
     border-right: 1px solid #000000;
     background-color: var(--clr-dark);
 
@@ -41,6 +41,13 @@ export const booksnapApp = css`
     a {
       padding: 0.5em;
     }
+    .logo {
+      display: none;
+    }
+
+    ul {
+      margin-top: 1rem;
+    }
   }
 
   #sidebar ul {
@@ -55,19 +62,17 @@ export const booksnapApp = css`
   #sidebar ul > li:first-child {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     margin-bottom: 16px;
-    .logo {
-      font-weight: 600;
-    }
   }
 
   #sidebar ul li:nth-child(7) {
     margin-top: auto;
   }
   #sidebar ul li:nth-child(8) {
-    padding-bottom: 16px;
+    margin-bottom: 2rem;
   }
-
+  /*FIXME: The border-left on the active class make the icon move to the right*/
   #sidebar ul li.active a {
     border-left: 2px solid var(--clr-light);
     color: var(--clr-light);
@@ -94,10 +99,11 @@ export const booksnapApp = css`
   }
 
   .logo {
-    display: flex;
-    align-items: center;
-    gap: 1em;
-    padding: 0.85em;
+    font-family: 'Boogaloo', sans-serif;
+    font-weight: 400;
+    font-size: var(--step-3);
+    padding-left: 0.425em;
+    padding-bottom: 0.3em;
     color: var(--clr-accent);
   }
 
@@ -111,9 +117,8 @@ export const booksnapApp = css`
 
   #toggle-btn {
     margin-left: auto;
-    padding: 1em;
+    padding-right: 1em;
     border: none;
-    border-radius: 0.5em;
     background: none;
     cursor: pointer;
   }
@@ -164,7 +169,7 @@ export const booksnapApp = css`
       }
 
       ul li:nth-child(8) {
-        padding-bottom: 0;
+        margin-bottom: 0;
       }
 
       ul a {
