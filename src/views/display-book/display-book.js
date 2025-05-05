@@ -8,10 +8,12 @@ export class DisplayBook extends LitElement {
   constructor() {
     super();
     this.book = null;
+    this.showNotFound = false;
   }
 
   static properties = {
     book: { type: Object },
+    showNotFound: { type: Boolean },
   };
 
   async connectedCallback() {
@@ -26,28 +28,117 @@ export class DisplayBook extends LitElement {
         const [firstBook] = Object.values(book);
         this.book = firstBook;
       } catch (err) {
-        console.error('Error fetching book:', err);
+        console.error(err);
       }
+    }
+  }
+
+  async handleCoverChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      try {
+        // Create object URL for preview
+        const objectUrl = URL.createObjectURL(file);
+        this.book = {
+          ...this.book,
+          cover: {
+            ...this.book.cover,
+            large: objectUrl,
+          },
+        };
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  }
+
+  /* eslint class-methods-use-this: 0 */
+  startSpinner() {
+    return html`
+      <div class="spinner-container">
+        <div class="spinner"></div>
+      </div>
+    `;
+  }
+
+  stopSpinner() {
+    const spinner = this.shadowRoot.querySelector('.spinner-container');
+    if (spinner) {
+      spinner.remove();
     }
   }
 
   render() {
     if (!this.book) {
-      return html`
-        <div class="spinner-container">
-          <div class="spinner"></div>
-        </div>
-      `;
+      if (this.showNotFound) {
+        return html`<h2>Book not found</h2>`;
+      }
+      setTimeout(() => {
+        this.stopSpinner();
+        this.showNotFound = true;
+      }, 3000);
+      return this.startSpinner();
     }
     return html`
-      <div class="book-card">
-        <h2>${this.book.title}</h2>
-        <p>
-          <strong>Author:</strong> ${this.book.authors?.[0]?.name || 'Unknown'}
-        </p>
-        <p><strong>Published:</strong> ${this.book.publish_date || 'N/A'}</p>
-        <img src="${this.book.cover.medium}" alt="Book cover" />
-      </div>
+      ${console.log(this.book)}
+      <form @submit=${this.handleFormSubmit}>
+        <div class="cover-container">
+          ${this.book.cover?.large
+            ? html`<img
+                src="${this.book.cover.large}"
+                alt="Book cover"
+                class="book-cover"
+              />`
+            : html`<div class="no-cover">No cover available</div>`}
+          <label class="cover-upload">
+            Change Cover
+            <input
+              type="file"
+              accept="image/*"
+              @change=${this.handleCoverChange}
+              class="cover-input"
+            />
+          </label>
+        </div>
+
+        <label>
+          Title:
+          <input
+            type="text"
+            name="title"
+            .value="${this.book.title}"
+            required
+          />
+        </label>
+        <label>
+          Author:
+          <input
+            type="text"
+            name="author"
+            .value="${this.book.authors?.[0]?.name || 'Unknown'}"
+            required
+          />
+        </label>
+        <label>
+          Publish Date:
+          <input
+            type="date"
+            name="publishDate"
+            .value="${this.book.publish_date || ''}"
+          />
+        </label>
+        <label>
+          ISBN:
+          <input
+            type="text"
+            name="isbn"
+            .value="${this.book.identifiers?.isbn_10
+              ? this.book.identifiers?.isbn_10
+              : this.book.identifiers?.isbn_13 || ''}"
+          />
+        </label>
+        <button class="button-submit" type="submit">Submit</button>
+      </form>
     `;
   }
 }

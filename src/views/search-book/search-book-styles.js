@@ -16,6 +16,7 @@ export const searchBook = css`
     cursor: pointer;
     font-size: var(--step-0);
     border: none;
+    border-bottom: 5px solid transparent;
     text-align: left;
     width: 12rem;
   }
