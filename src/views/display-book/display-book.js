@@ -1,6 +1,7 @@
 import { LitElement, html } from 'lit';
 import { fetchBookByIsbn } from '../../api/books.js';
 import { displayBook } from './display-book-styles.js';
+import '../../components/spinner.js';
 
 export class DisplayBook extends LitElement {
   static styles = [displayBook];
@@ -52,32 +53,16 @@ export class DisplayBook extends LitElement {
     }
   }
 
-  /* eslint class-methods-use-this: 0 */
-  startSpinner() {
-    return html`
-      <div class="spinner-container">
-        <div class="spinner"></div>
-      </div>
-    `;
-  }
-
-  stopSpinner() {
-    const spinner = this.shadowRoot.querySelector('.spinner-container');
-    if (spinner) {
-      spinner.remove();
-    }
-  }
-
   render() {
     if (!this.book) {
       if (this.showNotFound) {
         return html`<h2>Book not found</h2>`;
       }
       setTimeout(() => {
-        this.stopSpinner();
         this.showNotFound = true;
+        this.requestUpdate();
       }, 3000);
-      return this.startSpinner();
+      return html`<spinner-element></spinner-element>`;
     }
     return html`
       ${console.log(this.book)}

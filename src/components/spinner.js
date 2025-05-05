@@ -25,33 +25,12 @@ export class Spinner extends LitElement {
     }
   `;
 
-  static properties = {
-    showNotFound: { type: Boolean },
-  };
-
-  constructor() {
-    super();
-    this.showNotFound = false;
-  }
-
-  /* eslint class-methods-use-this: 0 */
-  startSpinner() {
+  render() {
     return html`
       <div class="spinner-container">
         <div class="spinner"></div>
       </div>
     `;
-  }
-
-  stopSpinner() {
-    const spinner = this.shadowRoot.querySelector('.spinner-container');
-    if (spinner) {
-      spinner.remove();
-    }
-  }
-
-  render() {
-    return html`${this.startSpinner()}`;
   }
 }
 
