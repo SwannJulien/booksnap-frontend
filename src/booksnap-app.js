@@ -3,7 +3,7 @@ import { LitElement, html } from 'lit';
 
 import { booksnapApp } from './booksnap-app-styles.js';
 import './components/barecode-Scanner/barecode-scanner.js';
-import './views/display-book/display-book.js';
+import './views/save-book/save-book.js';
 import './views/home-view/home-view.js';
 import './views/search-book/search-book.js';
 
@@ -50,9 +50,9 @@ class BooksnapApp extends LitElement {
       },
       {
         path: '/book',
-        component: 'display-book',
+        component: 'save-book',
         action: async () => {
-          await import('./views/display-book/display-book.js');
+          await import('./views/save-book/save-book.js');
           listItems.forEach(item => {
             item.classList.remove('active');
           });

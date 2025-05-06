@@ -1,10 +1,10 @@
 import { LitElement, html } from 'lit';
 import { fetchBookByIsbn } from '../../api/books.js';
-import { displayBook } from './display-book-styles.js';
+import { saveBook } from './save-book-styles.js';
 import '../../components/spinner.js';
 
-export class DisplayBook extends LitElement {
-  static styles = [displayBook];
+export class SaveBook extends LitElement {
+  static styles = [saveBook];
 
   constructor() {
     super();
@@ -61,7 +61,7 @@ export class DisplayBook extends LitElement {
       setTimeout(() => {
         this.showNotFound = true;
         this.requestUpdate();
-      }, 3000);
+      }, 10000);
       return html`<spinner-element></spinner-element>`;
     }
     return html`
@@ -128,4 +128,4 @@ export class DisplayBook extends LitElement {
   }
 }
 
-customElements.define('display-book', DisplayBook);
+customElements.define('save-book', SaveBook);

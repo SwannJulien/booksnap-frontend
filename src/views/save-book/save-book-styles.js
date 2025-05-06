@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const displayBook = css`
+export const saveBook = css`
   :host {
     display: block;
   }

@@ -2,6 +2,7 @@ import { Router } from '@vaadin/router';
 import { LitElement, html } from 'lit';
 
 import '../../components/barecode-Scanner/barecode-scanner.js';
+import '../save-book/save-book.js';
 import { searchBook } from './search-book-styles.js';
 
 export class SearchBook extends LitElement {
@@ -64,7 +65,9 @@ export class SearchBook extends LitElement {
         ${this.activeTab === 'scan'
           ? html`
               <div class="scan-tab">
-                <h2>Use your device to scan the book’s barcode</h2>
+                <h2>
+                  Scan your book's barecode to get its details automatically
+                </h2>
                 <barecode-scanner
                   @sendBarecode=${this.handleBareCodeScanned}
                 ></barecode-scanner>
@@ -74,7 +77,9 @@ export class SearchBook extends LitElement {
         ${this.activeTab === 'isbn'
           ? html`
               <div class="isbn-tab">
-                <h2>Type the ISBN here</h2>
+                <h2>
+                  Enter your book's ISBN here to get its details automatically
+                </h2>
                 <div class="input-field">
                   <input
                     type="text"
