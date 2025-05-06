@@ -48,12 +48,6 @@ export const searchBook = css`
     gap: 1em;
   }
 
-  form {
-    display: flex;
-    flex-direction: column;
-    gap: 1em;
-  }
-
   .input-field input,
   form input {
     padding: 0.5em;

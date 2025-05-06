@@ -1,7 +1,7 @@
 import { LitElement, html } from 'lit';
 import { fetchBookByIsbn } from '../../api/books.js';
+import '../../components/spinner-element.js';
 import { saveBook } from './save-book-styles.js';
-import '../../components/spinner.js';
 
 export class SaveBook extends LitElement {
   static styles = [saveBook];
@@ -66,7 +66,7 @@ export class SaveBook extends LitElement {
     }
     return html`
       ${console.log(this.book)}
-      <form @submit=${this.handleFormSubmit}>
+      <form-element @submit=${this.handleFormSubmit}>
         <div class="cover-container">
           ${this.book.cover?.large
             ? html`<img
@@ -123,7 +123,7 @@ export class SaveBook extends LitElement {
           />
         </label>
         <button class="button-submit" type="submit">Submit</button>
-      </form>
+      </form-element>
     `;
   }
 }
