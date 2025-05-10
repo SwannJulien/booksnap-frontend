@@ -41,6 +41,8 @@ export const saveBook = css`
     background: var(--clr-accent);
     color: var(--clr-font);
     border-radius: 4px;
+    font-size: var(--step-0);
+    border: none;
   }
 
   .cover-input {
@@ -50,5 +52,29 @@ export const saveBook = css`
   .book-card {
     text-align: center;
     padding: 1rem;
+  }
+
+  label {
+    text-align: left;
+    padding-right: 1em;
+    font-size: var(--step-1);
+  }
+
+  input {
+    padding: 0.5em;
+    border: 1px solid #ccc;
+    font-size: var(--step-0);
+    margin-right: 1em;
+  }
+
+  .button-submit {
+    grid-column: 2;
+    background-color: var(--clr-accent);
+    color: var(--clr-font);
+    border: none;
+    width: 9em;
+    padding: 0.5em 1em;
+    cursor: pointer;
+    font-size: var(--step-0);
   }
 `;
