@@ -11,6 +11,10 @@ export const saveBook = css`
     background: white;
   }
 
+  .intro-container {
+    margin-bottom: 3rem;
+  }
+
   .cover-container {
     grid-column: 2;
     margin-bottom: 2em;

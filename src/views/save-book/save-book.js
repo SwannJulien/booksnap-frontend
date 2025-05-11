@@ -67,6 +67,12 @@ export class SaveBook extends LitElement {
     return html`
       ${console.log(this.book)}
       <div class="container">
+        <div class="intro-container">
+          <h2>Save Book</h2>
+          <p>
+            Please review the book details and make any necessary corrections.
+          </p>
+        </div>
         <form-element @submit=${this.handleFormSubmit}>
           <div class="cover-container">
             ${this.book?.cover?.medium
