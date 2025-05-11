@@ -5,16 +5,18 @@ export const saveBook = css`
     display: block;
   }
 
-  .book-details {
-    margin-bottom: 2em;
+  .container {
+    padding: 1em;
+    border: 1px solid #ccc;
+    background: white;
   }
 
   .cover-container {
+    grid-column: 2;
+    margin-bottom: 2em;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 1em;
-    margin-bottom: 2em;
+    align-items: start;
   }
 
   .book-cover {
@@ -38,11 +40,12 @@ export const saveBook = css`
   .cover-upload {
     cursor: pointer;
     padding: 0.5em 1em;
+    margin-top: 1em;
     background: var(--clr-accent);
     color: var(--clr-font);
-    border-radius: 4px;
     font-size: var(--step-0);
     border: none;
+    width: 9em;
   }
 
   .cover-input {
@@ -60,11 +63,16 @@ export const saveBook = css`
     font-size: var(--step-1);
   }
 
-  input {
+  input,
+  select {
     padding: 0.5em;
     border: 1px solid #ccc;
     font-size: var(--step-0);
     margin-right: 1em;
+  }
+
+  option {
+    background-color: white;
   }
 
   .button-submit {

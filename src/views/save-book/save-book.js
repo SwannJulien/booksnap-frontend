@@ -66,63 +66,71 @@ export class SaveBook extends LitElement {
     }
     return html`
       ${console.log(this.book)}
-      <div class="cover-container">
-        ${this.book?.cover?.medium
-          ? html`<img
-              src="${this?.book?.cover?.medium}"
-              alt="Book cover"
-              class="book-cover"
-            />`
-          : html`<div class="no-cover">No cover available</div>`}
+      <div class="container">
+        <form-element @submit=${this.handleFormSubmit}>
+          <div class="cover-container">
+            ${this.book?.cover?.medium
+              ? html`<img
+                  src="${this?.book?.cover?.medium}"
+                  alt="Book cover"
+                  class="book-cover"
+                />`
+              : html`<div class="no-cover">No cover available</div>`}
 
-        <label class="cover-upload" for="cover-upload">Change Cover</label>
-        <input
-          id="cover-upload"
-          type="file"
-          accept="image/*"
-          @change=${this.handleCoverChange}
-          class="cover-input"
-        />
+            <label class="cover-upload" for="cover-upload">Change Cover</label>
+            <input
+              id="cover-upload"
+              type="file"
+              accept="image/*"
+              @change=${this.handleCoverChange}
+              class="cover-input"
+            />
+          </div>
+          <label for="title">Title</label>
+          <input
+            id="title"
+            type="text"
+            name="title"
+            .value="${this.book.title}"
+            required
+          />
+
+          <label for="author">Author</label>
+          <input
+            id="author"
+            type="text"
+            name="author"
+            .value="${this.book.authors?.[0]?.name || 'Unknown'}"
+            required
+          />
+
+          <label for="publishDate">Publish Date</label>
+          <input
+            id="publishDate"
+            type="text"
+            name="publishDate"
+            .value="${this.book.publish_date || ''}"
+          />
+
+          <label for="isbn">ISBN</label>
+          <input
+            id="isbn"
+            type="text"
+            name="isbn"
+            .value="${this.book.identifiers?.isbn_10
+              ? this.book.identifiers?.isbn_10
+              : this.book.identifiers?.isbn_13 || ''}"
+          />
+
+          <label for="type">Book type</label>
+          <select id="type" name="type" required>
+            <option value="fiction">Fiction</option>
+            <option value="non-fiction">Non-fiction</option>
+          </select>
+
+          <button class="button-submit" type="submit">Submit</button>
+        </form-element>
       </div>
-      <form-element @submit=${this.handleFormSubmit}>
-        <label for="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          .value="${this.book.title}"
-          required
-        />
-
-        <label for="author">Author</label>
-        <input
-          id="author"
-          type="text"
-          name="author"
-          .value="${this.book.authors?.[0]?.name || 'Unknown'}"
-          required
-        />
-
-        <label for="publishDate">Publish Date</label>
-        <input
-          id="publishDate"
-          type="text"
-          name="publishDate"
-          .value="${this.book.publish_date || ''}"
-        />
-
-        <label for="isbn">ISBN</label>
-        <input
-          id="isbn"
-          type="text"
-          name="isbn"
-          .value="${this.book.identifiers?.isbn_10
-            ? this.book.identifiers?.isbn_10
-            : this.book.identifiers?.isbn_13 || ''}"
-        />
-
-        <button class="button-submit" type="submit">Submit</button>
-      </form-element>
     `;
   }
 }

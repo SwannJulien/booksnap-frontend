@@ -44,11 +44,16 @@ export const searchBook = css`
     font-size: var(--step-1);
   }
 
-  input {
+  input,
+  select {
     padding: 0.5em;
     border: 1px solid #ccc;
     font-size: var(--step-0);
     margin-right: 1em;
+  }
+
+  option {
+    background-color: white;
   }
 
   .button-submit {

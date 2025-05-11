@@ -116,6 +116,12 @@ export class SearchBook extends LitElement {
                   <label for="isbn">ISBN</label>
                   <input id="isbn" type="text" name="isbn" />
 
+                  <label for="type">Book type</label>
+                  <select id="type" name="type" required>
+                    <option value="fiction">Fiction</option>
+                    <option value="non-fiction">Non-fiction</option>
+                  </select>
+
                   <button class="button-submit" type="submit">Submit</button>
                 </form-element>
               </div>
