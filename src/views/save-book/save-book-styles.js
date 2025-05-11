@@ -22,19 +22,22 @@ export const saveBook = css`
   .book-cover {
     max-width: 300px;
     height: auto;
-    border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   }
 
-  .no-cover {
-    width: 300px;
-    height: 450px;
-    background: #f0f0f0;
+  .no-cover-container {
     display: flex;
-    align-items: center;
+    flex-direction: column;
     justify-content: center;
-    border-radius: 8px;
-    color: #666;
+    height: 10em;
+    width: 8.5em;
+    background-color: #dedede;
+  }
+
+  .no-cover {
+    text-align: center;
+    color: var(--clr-light-gray);
+    font-size: var(--step-1);
   }
 
   .cover-upload {
@@ -45,7 +48,6 @@ export const saveBook = css`
     color: var(--clr-font);
     font-size: var(--step-0);
     border: none;
-    width: 9em;
   }
 
   .cover-input {

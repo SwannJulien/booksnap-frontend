@@ -105,16 +105,38 @@ export class SearchBook extends LitElement {
                 <h2>Fill in the book details</h2>
                 <form-element @submit=${this.handleFormSubmit}>
                   <label for="title">Title</label>
-                  <input id="title" type="text" name="title" required />
+                  <input
+                    id="title"
+                    type="text"
+                    name="title"
+                    required
+                    placeholder="ex: The Great Gatsby"
+                  />
 
                   <label for="author">Author</label>
-                  <input id="author" type="text" name="author" required />
+                  <input
+                    id="author"
+                    type="text"
+                    name="author"
+                    required
+                    placeholder="ex: F. Scott Fitzgerald, John Doe"
+                  />
 
-                  <label for="publishDate">Publish Date</label>
-                  <input id="publishDate" type="date" name="publishDate" />
+                  <label for="publishYear">Publish Year</label>
+                  <input
+                    id="publishYear"
+                    type="text"
+                    name="publishYear"
+                    placeholder="ex: 1925"
+                  />
 
                   <label for="isbn">ISBN</label>
-                  <input id="isbn" type="text" name="isbn" />
+                  <input
+                    id="isbn"
+                    type="text"
+                    name="isbn"
+                    placeholder="ex: 1234567890 or 1234567890123"
+                  />
 
                   <label for="type">Book type</label>
                   <select id="type" name="type" required>

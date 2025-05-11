@@ -75,7 +75,11 @@ export class SaveBook extends LitElement {
                   alt="Book cover"
                   class="book-cover"
                 />`
-              : html`<div class="no-cover">No cover available</div>`}
+              : html`
+                  <div class="no-cover-container">
+                    <p class="no-cover">No cover available</p>
+                  </div>
+                `}
 
             <label class="cover-upload" for="cover-upload">Change Cover</label>
             <input
@@ -100,7 +104,9 @@ export class SaveBook extends LitElement {
             id="author"
             type="text"
             name="author"
-            .value="${this.book.authors?.[0]?.name || 'Unknown'}"
+            .value="${this.book.authors
+              ?.map(author => author.name)
+              .join(', ') || 'Unknown'}"
             required
           />
 
@@ -119,7 +125,8 @@ export class SaveBook extends LitElement {
             name="isbn"
             .value="${this.book.identifiers?.isbn_10
               ? this.book.identifiers?.isbn_10
-              : this.book.identifiers?.isbn_13 || ''}"
+              : this.book.identifiers?.isbn_13 || 'Unknown'}"
+            required
           />
 
           <label for="type">Book type</label>
