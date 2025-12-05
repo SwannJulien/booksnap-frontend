@@ -2,7 +2,7 @@ import { Router } from '@vaadin/router';
 import { LitElement, html } from 'lit';
 
 import { booksnapApp } from './booksnap-app-styles.js';
-import './components/barecode-Scanner/barecode-scanner.js';
+import './components/barecode-scanner/barecode-scanner.js';
 import './views/save-book/save-book.js';
 import './views/home-view/home-view.js';
 import './views/search-book/search-book.js';

@@ -1,3 +1,4 @@
 import { css } from 'lit';
+import { resetStyles } from '../../shared-styles.js';
 
-export const borrowingView = css``;
+export const borrowingView = [resetStyles, css``];

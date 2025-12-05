@@ -1,6 +1,7 @@
 import { BrowserMultiFormatReader } from '@zxing/browser';
 import { LitElement, html } from 'lit';
 import { barecodeScanner } from './barecode-scanner-styles.js';
+import '../button-bks/button-bks.js';
 
 export class BarecodeScanner extends LitElement {
   static styles = [barecodeScanner];
@@ -66,7 +67,7 @@ export class BarecodeScanner extends LitElement {
         },
       );
     } catch (err) {
-      console.error('QR Scanner error:', err);
+      // console.error('QR Scanner error:', err);
     }
   }
 
@@ -93,9 +94,11 @@ export class BarecodeScanner extends LitElement {
   render() {
     return html`
       <video id="video" autoplay muted ?hidden=${this.hideVideo}></video>
-      <button @click=${this.toggleScanner}>
-        ${this.isScanning ? 'Stop Scanning' : 'Start Scanning'}
-      </button>
+      <button-bks
+        label=${this.isScanning ? 'Stop Scanning' : 'Start Scanning'}
+        @click=${this.toggleScanner}
+      >
+      </button-bks>
     `;
   }
 }
