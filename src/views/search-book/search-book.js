@@ -2,7 +2,6 @@ import { Router } from '@vaadin/router';
 import { LitElement, html } from 'lit';
 
 import '../../components/barecode-scanner/barecode-scanner.js';
-import '../../components/form-element.js';
 import '../save-book/save-book.js';
 import '../../components/button-bks/button-bks.js';
 import { searchBook } from './search-book-styles.js';
@@ -116,7 +115,7 @@ export class SearchBook extends LitElement {
     return html`
       <div class="form-tab">
         <h2>Fill in the book details</h2>
-        <form-element @submit=${this.handleFormSubmit}>
+        <form @submit=${this.handleFormSubmit}>
           <label for="title">Title</label>
           <input
             id="title"
@@ -158,7 +157,7 @@ export class SearchBook extends LitElement {
           </select>
 
           <button-bks type="submit" label="Submit"> </button-bks>
-        </form-element>
+        </form>
       </div>
     `;
   }

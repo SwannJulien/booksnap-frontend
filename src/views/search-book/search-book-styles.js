@@ -39,6 +39,17 @@ export const searchBook = [
       background: var(--clr-gray);
     }
 
+    h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    form {
+      display: grid;
+      grid-template-columns: 15% 50%;
+      gap: 1em;
+      align-items: center;
+    }
+
     .input-field {
       display: flex;
       flex-direction: column;
@@ -48,12 +59,12 @@ export const searchBook = [
     label {
       text-align: left;
       padding-right: 1em;
-      font-size: var(--step-1);
+      font-size: var(--step-0);
     }
 
     input,
     select {
-      padding: 0.5em;
+      padding: 0.4em;
       border: 1px solid #ccc;
       font-size: var(--step-0);
       margin-right: 1em;
@@ -63,19 +74,8 @@ export const searchBook = [
       background-color: white;
     }
 
-    .button-submit {
-      grid-column: 2;
-      background-color: var(--clr-accent);
-      color: var(--clr-text-light);
-      border: none;
-      width: 9em;
-      padding: 0.5em 1em;
-      cursor: pointer;
-      font-size: var(--step-0);
-    }
-
-    h2 {
-      margin-bottom: 1rem;
+    button-bks {
+      margin-top: 1.5em;
     }
 
     @media (max-width: 768px) {
