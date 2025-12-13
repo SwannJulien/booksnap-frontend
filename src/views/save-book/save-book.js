@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { fetchBookByIsbn } from '../../api/books.js';
+import { fetchBookByIsbn } from '../../api/openLibrary.js';
 import '../../components/spinner-element.js';
 import { saveBook } from './save-book-styles.js';
 
@@ -29,7 +29,7 @@ export class SaveBook extends LitElement {
         const [firstBook] = Object.values(book);
         this.book = firstBook;
       } catch (err) {
-        console.error(err);
+        throw new Error('Failed to fetch book data');
       }
     }
   }
@@ -48,7 +48,7 @@ export class SaveBook extends LitElement {
           },
         };
       } catch (err) {
-        console.error(err);
+        throw new Error('Failed to load cover image');
       }
     }
   }
@@ -65,7 +65,6 @@ export class SaveBook extends LitElement {
       return html`<spinner-element></spinner-element>`;
     }
     return html`
-      ${console.log(this.book)}
       <div class="container">
         <div class="intro-container">
           <h2>Save Book</h2>

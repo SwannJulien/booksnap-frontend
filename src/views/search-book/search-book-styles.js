@@ -34,7 +34,7 @@ export const searchBook = [
 
     .tab-content {
       padding: 1.5em 1.5em;
-      margin-top: 2rem;
+      margin: 2rem 0;
       border-radius: var(--border-radius-default);
       background: var(--clr-gray);
     }
@@ -72,6 +72,15 @@ export const searchBook = [
 
     option {
       background-color: white;
+    }
+
+    input:user-invalid,
+    select:user-invalid {
+      border: solid 2px red;
+    }
+
+    input:focus {
+      outline: none;
     }
 
     button-bks {
