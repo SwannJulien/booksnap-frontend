@@ -1,8 +1,8 @@
 import { css } from 'lit';
-import { resetStyles } from './shared-styles.js';
+import { sharedStyles } from './shared-styles.js';
 
 export const booksnapApp = [
-  resetStyles,
+  sharedStyles,
   css`
     :host {
       min-height: 100vh;
@@ -209,7 +209,9 @@ export const booksnapApp = [
       }
       #sidebar ul li.active a {
         border-left: none;
-        border-bottom: 4px solid var(--clr-text-light);
+        border-bottom: 4px solid var(--clr-accent);
+        border-radius: var(--border-radius-default) var(--border-radius-default)
+          0 0;
       }
     }
   `,

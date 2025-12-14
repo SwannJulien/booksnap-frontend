@@ -1,4 +1,4 @@
 import { css } from 'lit';
-import { resetStyles } from '../../shared-styles.js';
+import { sharedStyles } from '../../shared-styles.js';
 
-export const catalogView = [resetStyles, css``];
+export const catalogView = [sharedStyles, css``];

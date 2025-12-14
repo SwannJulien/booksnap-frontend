@@ -1,5 +1,5 @@
 import { LitElement, html } from 'lit';
-import { buttonBks } from './button-bks.css.js';
+import { buttonBks } from './button-bks-styles.js';
 
 export class ButtonBks extends LitElement {
   static formAssociated = true;

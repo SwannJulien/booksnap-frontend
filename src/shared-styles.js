@@ -1,6 +1,6 @@
 import { css } from 'lit';
 
-export const resetStyles = css`
+export const sharedStyles = css`
   h1,
   h2,
   h3,
@@ -9,5 +9,54 @@ export const resetStyles = css`
   h6 {
     margin: 0;
     padding: 0;
+  }
+
+  .card {
+    padding: 1.5em 1.5em;
+    margin: 2rem 0;
+    border-radius: var(--border-radius-default);
+    background: var(--clr-gray);
+  }
+
+  .card-title {
+    margin-bottom: 1.5rem;
+  }
+
+  form {
+    display: grid;
+    grid-template-columns: 15% 50%;
+    gap: 1em;
+    align-items: center;
+
+    @media (max-width: 48rem) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  label {
+    text-align: left;
+    padding-right: 1em;
+    font-size: var(--step-0);
+  }
+
+  input,
+  select {
+    padding: 0.4em;
+    border: 1px solid #ccc;
+    font-size: var(--step-0);
+    margin-right: 1em;
+  }
+
+  option {
+    background-color: white;
+  }
+
+  input:user-invalid,
+  select:user-invalid {
+    border: solid 2px red;
+  }
+
+  input:focus {
+    outline: none;
   }
 `;

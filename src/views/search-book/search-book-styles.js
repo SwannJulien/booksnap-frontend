@@ -1,8 +1,8 @@
 import { css } from 'lit';
-import { resetStyles } from '../../shared-styles.js';
+import { sharedStyles } from '../../shared-styles.js';
 
 export const searchBook = [
-  resetStyles,
+  sharedStyles,
   css`
     :host {
       display: block;
@@ -32,62 +32,14 @@ export const searchBook = [
       color: var(--clr-accent);
     }
 
-    .tab-content {
-      padding: 1.5em 1.5em;
-      margin: 2rem 0;
-      border-radius: var(--border-radius-default);
-      background: var(--clr-gray);
-    }
-
-    h2 {
-      margin-bottom: 1.5rem;
-    }
-
-    form {
-      display: grid;
-      grid-template-columns: 15% 50%;
-      gap: 1em;
-      align-items: center;
-    }
-
     .input-field {
       display: flex;
       flex-direction: column;
       gap: 1em;
-    }
 
-    label {
-      text-align: left;
-      padding-right: 1em;
-      font-size: var(--step-0);
-    }
-
-    input,
-    select {
-      padding: 0.4em;
-      border: 1px solid #ccc;
-      font-size: var(--step-0);
-      margin-right: 1em;
-    }
-
-    option {
-      background-color: white;
-    }
-
-    input:user-invalid,
-    select:user-invalid {
-      border: solid 2px red;
-    }
-
-    input:focus {
-      outline: none;
-    }
-
-    button-bks {
-      margin-top: 1.5em;
-    }
-
-    @media (max-width: 768px) {
+      input {
+        max-width: 30rem;
+      }
     }
   `,
 ];

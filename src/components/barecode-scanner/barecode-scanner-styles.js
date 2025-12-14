@@ -1,8 +1,8 @@
 import { css } from 'lit';
-import { resetStyles } from '../../shared-styles.js';
+import { sharedStyles } from '../../shared-styles.js';
 
 export const barecodeScanner = [
-  resetStyles,
+  sharedStyles,
   css`
     video {
       width: 100%;

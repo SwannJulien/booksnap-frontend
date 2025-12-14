@@ -1,14 +1,15 @@
 import { css } from 'lit';
-import { resetStyles } from '../../shared-styles.js';
+import { sharedStyles } from '../../shared-styles.js';
 
 export const buttonBks = [
-  resetStyles,
+  sharedStyles,
   css`
     :host {
       display: inline-block;
     }
     button {
       min-width: 8rem;
+      margin-top: 1.5rem;
       padding: 1em 1.5em;
       background-color: var(--clr-accent);
       color: var(--clr-dark);
