@@ -15,6 +15,7 @@ export class SearchBook extends LitElement {
     book: { type: Object },
     isbn: { type: String },
     activeTab: { type: String },
+    isModalHidden: { type: Boolean },
   };
 
   constructor() {
@@ -22,12 +23,16 @@ export class SearchBook extends LitElement {
     this.book = null;
     this.isbn = '';
     this.activeTab = 'scan';
+    this.isModalHidden = true;
   }
 
   render() {
     return html`
-      <div class="tabs">${this.tabsTpl}</div>
-      <div class="card">${this.tabContentTpl}</div>
+      <div class=${this.isModalHidden ? '' : 'blurred'}>
+        <div class="tabs">${this.tabsTpl}</div>
+        <div class="card">${this.tabContentTpl}</div>
+      </div>
+      ${this.modalTpl}
     `;
   }
 
@@ -119,6 +124,7 @@ export class SearchBook extends LitElement {
           placeholder="Book title"
           pattern="^[A-Za-z0-9&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
           required
+          @input=${() => this.requestUpdate()}
         />
 
         <label for="author">Author</label>
@@ -129,6 +135,7 @@ export class SearchBook extends LitElement {
           placeholder="Comma separated authors"
           pattern="^[\\p{L}\\p{M}\\s\\-.'\\(\\),]{1,500}$"
           required
+          @input=${() => this.requestUpdate()}
         />
 
         <label for="publishingYear">Publish Year</label>
@@ -160,10 +167,16 @@ export class SearchBook extends LitElement {
           maxlength="13"
           pattern="\\d{10}(\\d{3})?"
           required
+          @input=${() => this.requestUpdate()}
         />
 
         <label for="isFiction">Book type</label>
-        <select id="type" name="isFiction" required>
+        <select
+          id="type"
+          name="isFiction"
+          required
+          @input=${() => this.requestUpdate()}
+        >
           <option value="" disabled selected hidden>Select book type</option>
           <option value="true">Fiction</option>
           <option value="false">Non-fiction</option>
@@ -208,9 +221,46 @@ export class SearchBook extends LitElement {
           placeholder="Comma separated genres"
           pattern="^[\\p{L}\\p{N}\\s\\-',.]{1,500}$"
         />
-        <button-bks type="submit" label="Submit"> </button-bks>
+        <button-bks
+          type="submit"
+          label="Submit"
+          ?disabled=${!this.isFormSubmitable()}
+        >
+        </button-bks>
       </form>
+      <button @click=${this.openModal}>Open modal</button>
     `;
+  }
+
+  isFormSubmitable() {
+    const form = this.renderRoot?.querySelector('form');
+    return Boolean(form && form.checkValidity());
+  }
+
+  get modalTpl() {
+    return html`
+      <div class="modal" ?hidden=${this.isModalHidden}>
+        <div class="modal-content">
+          <button
+            class="close-modal-btn"
+            type="button"
+            aria-label="Close"
+            @click=${this.closeModal}
+          >
+            &times;
+          </button>
+          <h2>Book successfully created !</h2>
+        </div>
+      </div>
+    `;
+  }
+
+  openModal() {
+    this.isModalHidden = false;
+  }
+
+  closeModal() {
+    this.isModalHidden = true;
   }
 
   // METHODS
@@ -222,15 +272,18 @@ export class SearchBook extends LitElement {
 
     if (bookData.author) {
       bookData.author = bookData.author.split(',').map(a => a.trim());
-    }
+    } else bookData.author = null;
     if (bookData.genres) {
       bookData.genres = bookData.genres.split(',').map(g => g.trim());
-    }
+    } else bookData.genres = null;
     if (bookData.numberOfPages) {
       bookData.numberOfPages = parseInt(bookData.numberOfPages, 10);
-    }
+    } else bookData.numberOfPages = null;
     if (bookData.publishingYear) {
       bookData.publishingYear = parseInt(bookData.publishingYear, 10);
+    } else bookData.publishingYear = null;
+    if (!bookData.publisher) {
+      bookData.publisher = null;
     }
     if (bookData.isbn.length === 10) {
       bookData.isbn10 = bookData.isbn;
@@ -242,7 +295,12 @@ export class SearchBook extends LitElement {
 
     bookData.libraryId = 1; // TODO: replace temporary hardcoded library ID
 
-    postBook(bookData);
+    const response = postBook(bookData);
+    this.handlePostBookResponse(response);
+  }
+
+  async handlePostBookResponse() {
+    // handle post-book response (no console left)
   }
 
   async handleIsbnScanAndInput(e) {

@@ -41,5 +41,40 @@ export const searchBook = [
         max-width: 30rem;
       }
     }
+
+    .modal {
+      position: fixed;
+      inset: 0px;
+      width: 17rem;
+      height: 30rem;
+      margin: auto;
+    }
+
+    .modal-content {
+      display: flex;
+      flex-direction: column;
+      padding: 1rem;
+      width: 30rem;
+      height: 30rem;
+      border-radius: var(--border-radius-default);
+      background-color: var(--clr-text-light);
+      color: var(--clr-dark-secondary);
+
+      h2 {
+        text-align: center;
+      }
+    }
+
+    .close-modal-btn {
+      cursor: pointer;
+      align-self: end;
+      font-size: 1.875rem;
+      background: none;
+      border: none;
+    }
+
+    .blurred {
+      filter: blur(2px);
+    }
   `,
 ];
