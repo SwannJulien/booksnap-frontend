@@ -16,6 +16,8 @@ export class SearchBook extends LitElement {
     isbn: { type: String },
     activeTab: { type: String },
     isModalHidden: { type: Boolean },
+    modalType: { type: String },
+    modalData: { type: Object },
   };
 
   constructor() {
@@ -24,6 +26,8 @@ export class SearchBook extends LitElement {
     this.isbn = '';
     this.activeTab = 'scan';
     this.isModalHidden = true;
+    this.modalType = null;
+    this.modalData = null;
   }
 
   render() {
@@ -228,13 +232,7 @@ export class SearchBook extends LitElement {
         >
         </button-bks>
       </form>
-      <button @click=${this.openModal}>Open modal</button>
     `;
-  }
-
-  isFormSubmitable() {
-    const form = this.renderRoot?.querySelector('form');
-    return Boolean(form && form.checkValidity());
   }
 
   get modalTpl() {
@@ -249,10 +247,42 @@ export class SearchBook extends LitElement {
           >
             &times;
           </button>
-          <h2>Book successfully created !</h2>
+          ${this.modalType === 'success'
+            ? this.successModalContentTpl
+            : this.errorModalContentTpl}
         </div>
       </div>
     `;
+  }
+
+  get successModalContentTpl() {
+    return html`
+      <h2>Book successfully created!</h2>
+      <img
+        src="data:image/png;base64,${this.modalData?.qrCode}"
+        alt="QR Code"
+        class="qr-code"
+      />
+      <button-bks
+        class="print-btn"
+        label="Print QR Code"
+        @click=${this.printQRCode}
+      ></button-bks>
+    `;
+  }
+
+  get errorModalContentTpl() {
+    return html`
+      <h2>Error</h2>
+      <p class="error-message">${this.modalData?.message}</p>
+    `;
+  }
+
+  // METHODS
+
+  isFormSubmitable() {
+    const form = this.renderRoot?.querySelector('form');
+    return Boolean(form && form.checkValidity());
   }
 
   openModal() {
@@ -263,9 +293,7 @@ export class SearchBook extends LitElement {
     this.isModalHidden = true;
   }
 
-  // METHODS
-
-  handleFormSubmit(e) {
+  async handleFormSubmit(e) {
     e.preventDefault();
     const formData = new FormData(e.target);
     const bookData = Object.fromEntries(formData.entries());
@@ -295,12 +323,23 @@ export class SearchBook extends LitElement {
 
     bookData.libraryId = 1; // TODO: replace temporary hardcoded library ID
 
-    const response = postBook(bookData);
+    const response = await postBook(bookData);
     this.handlePostBookResponse(response);
   }
 
-  async handlePostBookResponse() {
-    // handle post-book response (no console left)
+  handlePostBookResponse(response) {
+    if (response.status === 201) {
+      this.modalType = 'success';
+      this.modalData = response.body;
+    } else {
+      this.modalType = 'error';
+      this.modalData = response.body;
+    }
+    this.openModal();
+  }
+
+  printQRCode() {
+    window.print();
   }
 
   async handleIsbnScanAndInput(e) {

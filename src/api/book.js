@@ -10,14 +10,8 @@ export async function postBook(payload) {
       body: JSON.stringify(payload),
     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const text = await response.text();
-    const result = text ? JSON.parse(text) : null;
-
-    return result;
+    const res = { status: response.status, body: await response.json() };
+    return res;
   } catch (error) {
     throw new Error('Failed to post book data');
   }
