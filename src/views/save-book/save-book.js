@@ -91,10 +91,10 @@ export class SaveBook extends LitElement {
         ></button-bks>
         <input
           id="cover-upload"
+          class="cover-input"
           type="file"
           accept="image/*"
           @change=${this.handleCoverChange}
-          class="cover-input"
         />
       </div>
     `;

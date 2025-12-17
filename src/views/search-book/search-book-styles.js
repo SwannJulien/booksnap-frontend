@@ -86,6 +86,36 @@ export const searchBook = [
       margin-inline: auto;
     }
 
+    .cover-wrapper {
+      display: flex;
+
+      input {
+        opacity: 0;
+        width: 0.1px;
+        height: 0.1px;
+      }
+      button-bks {
+        margin-top: 0;
+      }
+    }
+
+    .cover-preview-container {
+      display: flex;
+      justify-content: center;
+    }
+
+    .cover-preview {
+      max-width: 20rem;
+      max-height: 15rem;
+      border-radius: var(--border-radius-default);
+      box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.18),
+        0 2px 6px rgba(0, 0, 0, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      object-fit: cover;
+      display: block;
+    }
+
     @media print {
       .blurred,
       .tabs,

@@ -18,6 +18,7 @@ export class SearchBook extends LitElement {
     isModalHidden: { type: Boolean },
     modalType: { type: String },
     modalData: { type: Object },
+    coverPreview: { type: String },
   };
 
   constructor() {
@@ -117,9 +118,35 @@ export class SearchBook extends LitElement {
   }
 
   get formTabTpl() {
+    // TODO: when clicking on the cover preview thumbnail, open it in full screen with a close x
+    // like a modal, to be able to see it in bigger if needed.
     return html`
       <h2 class="card-title">Fill in the book details</h2>
+      ${this.coverPreview
+        ? html`<div class="cover-preview-container">
+            <img
+              src="${this.coverPreview}"
+              alt="Cover preview"
+              class="cover-preview"
+            />
+          </div>`
+        : ''}
       <form @submit=${this.handleFormSubmit}>
+        <label>Cover</label>
+        <div class="cover-wrapper">
+          <button-bks
+            label="Upload Cover"
+            @click=${() =>
+              this.shadowRoot.getElementById('cover-upload').click()}
+          ></button-bks>
+          <input
+            id="cover-upload"
+            name="cover"
+            type="file"
+            accept="image/*"
+            @change=${this.handleCoverChange}
+          />
+        </div>
         <label for="title">Title</label>
         <input
           id="title"
@@ -279,6 +306,21 @@ export class SearchBook extends LitElement {
   }
 
   // METHODS
+  async handleCoverChange(e) {
+    const input = e.target;
+    const file = input.files && input.files[0];
+    if (!file) {
+      this.coverPreview = undefined;
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.coverPreview = reader.result;
+      this.requestUpdate();
+    };
+    reader.readAsDataURL(file);
+  }
 
   isFormSubmitable() {
     const form = this.renderRoot?.querySelector('form');

@@ -28,7 +28,7 @@ export const sharedStyles = css`
     gap: 1em;
     align-items: center;
 
-    @media (max-width: 48rem) {
+    @media (max-width: 75rem) {
       grid-template-columns: 1fr;
     }
   }

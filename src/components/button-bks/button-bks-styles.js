@@ -6,10 +6,10 @@ export const buttonBks = [
   css`
     :host {
       display: inline-block;
+      margin-top: 1.5rem;
     }
     button {
       min-width: 8rem;
-      margin-top: 1.5rem;
       padding: 1em 1.5em;
       background-color: var(--clr-accent);
       color: var(--clr-dark);
