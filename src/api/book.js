@@ -13,6 +13,6 @@ export async function postBook(payload) {
     const res = { status: response.status, body: await response.json() };
     return res;
   } catch (error) {
-    throw new Error('Failed to post book data');
+    throw new Error(`Failed to post book data${error}`);
   }
 }

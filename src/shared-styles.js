@@ -22,17 +22,6 @@ export const sharedStyles = css`
     margin-bottom: 1.5rem;
   }
 
-  form {
-    display: grid;
-    grid-template-columns: 15% 50%;
-    gap: 1em;
-    align-items: center;
-
-    @media (max-width: 75rem) {
-      grid-template-columns: 1fr;
-    }
-  }
-
   label {
     text-align: left;
     padding-right: 1em;
@@ -41,8 +30,9 @@ export const sharedStyles = css`
 
   input,
   select {
-    padding: 0.4em;
-    border: 1px solid #ccc;
+    padding: 0.6em;
+    border: 1px solid var(--clr-text-muted);
+    border-radius: var(--border-radius-default);
     font-size: var(--step-0);
     margin-right: 1em;
   }

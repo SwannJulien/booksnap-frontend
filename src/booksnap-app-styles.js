@@ -11,15 +11,13 @@ export const booksnapApp = [
       grid-template-columns: auto 1fr;
       padding-right: 2em;
       gap: 2em;
-      overflow: hidden;
     }
 
     main {
-      overflow: auto;
-      height: 100vh;
       padding-top: 20px;
+      min-height: 100vh;
     }
-    /* FIXME: le scroll de la barre de nav s'arrête et c'est le scroll de la fenêtre qui prend le relais */
+
     #sidebar {
       box-sizing: border-box;
       height: 100%;

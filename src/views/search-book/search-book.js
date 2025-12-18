@@ -1,9 +1,9 @@
 import { Router } from '@vaadin/router';
 import { LitElement, html } from 'lit';
-
 import '../../components/barecode-scanner/barecode-scanner.js';
 import '../save-book/save-book.js';
 import '../../components/button-bks/button-bks.js';
+import { fetchBookByIsbn } from '../../api/openLibrary.js';
 import { searchBook } from './search-book-styles.js';
 import { postBook } from '../../api/book.js';
 import { sharedStyles } from '../../shared-styles.js';
@@ -19,6 +19,8 @@ export class SearchBook extends LitElement {
     modalType: { type: String },
     modalData: { type: Object },
     coverPreview: { type: String },
+    isFormHidden: { type: Boolean },
+    showFormNewBook: { type: Boolean },
   };
 
   constructor() {
@@ -29,6 +31,8 @@ export class SearchBook extends LitElement {
     this.isModalHidden = true;
     this.modalType = null;
     this.modalData = null;
+    this.isFormHidden = false;
+    this.showFormNewBook = false;
   }
 
   render() {
@@ -55,14 +59,19 @@ export class SearchBook extends LitElement {
           class=${this.activeTab === 'isbn' ? 'active' : ''}
           @click=${() => {
             this.activeTab = 'isbn';
+            this.showFormNewBook = false;
           }}
         >
           Enter ISBN
         </button>
         <button
           class=${this.activeTab === 'form' ? 'active' : ''}
-          @click=${() => {
+          @click=${async () => {
             this.activeTab = 'form';
+            this.book = null;
+            this.coverPreview = undefined;
+            await this.updateComplete;
+            this.renderRoot?.querySelector('.create-book-form')?.reset();
           }}
         >
           Fill Form
@@ -99,27 +108,38 @@ export class SearchBook extends LitElement {
       <h2 class="card-title">
         Enter your book's ISBN here to get its details automatically
       </h2>
-      <div class="input-field">
+      <form
+        class="find-by-isbn-form"
+        ?hidden=${this.showFormNewBook}
+        @submit=${this.handleIsbnFormSubmit}
+      >
         <input
           type="text"
           id="isbnInput"
-          placeholder="Enter ISBN here"
+          name="isbn"
           .value=${this.isbn}
+          placeholder="Enter ISBN here"
+          minlength="10"
+          maxlength="13"
+          pattern="\\d{10}(\\d{3})?"
+          required
           @input=${e => {
             this.isbn = e.target.value;
           }}
         />
         <button-bks
+          type="submit"
           label="Submit ISBN"
-          @click=${this.handleIsbnScanAndInput}
+          ?disabled=${!this.isFormSubmitable('.find-by-isbn-form')}
         ></button-bks>
-      </div>
+      </form>
+      ${this.showFormNewBook ? this.newBookForm : ''}
     `;
   }
 
   get formTabTpl() {
     // TODO: when clicking on the cover preview thumbnail, open it in full screen with a close x
-    // like a modal, to be able to see it in bigger if needed.
+    // like a modal, to be able to see it in bigger if needed.x
     return html`
       <h2 class="card-title">Fill in the book details</h2>
       ${this.coverPreview
@@ -131,27 +151,24 @@ export class SearchBook extends LitElement {
             />
           </div>`
         : ''}
-      <form @submit=${this.handleFormSubmit}>
-        <label>Cover</label>
-        <div class="cover-wrapper">
-          <button-bks
-            label="Upload Cover"
-            @click=${() =>
-              this.shadowRoot.getElementById('cover-upload').click()}
-          ></button-bks>
-          <input
-            id="cover-upload"
-            name="cover"
-            type="file"
-            accept="image/*"
-            @change=${this.handleCoverChange}
-          />
-        </div>
+      ${this.newBookForm}
+    `;
+  }
+
+  get newBookForm() {
+    return html`
+      ${this.coverTpl}
+      <form
+        class="create-book-form"
+        ?hidden=${this.isFormHidden}
+        @submit=${this.handleFormSubmit}
+      >
         <label for="title">Title</label>
         <input
           id="title"
           type="text"
           name="title"
+          .defaultValue="${this.book?.title || ''}"
           placeholder="Book title"
           pattern="^[A-Za-z0-9&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
           required
@@ -163,6 +180,9 @@ export class SearchBook extends LitElement {
           id="author"
           type="text"
           name="author"
+          .defaultValue="${this.book?.authors
+            ?.map(author => author.name)
+            .join(', ') || ''}"
           placeholder="Comma separated authors"
           pattern="^[\\p{L}\\p{M}\\s\\-.'\\(\\),]{1,500}$"
           required
@@ -174,6 +194,7 @@ export class SearchBook extends LitElement {
           id="publishingYear"
           type="number"
           name="publishingYear"
+          .defaultValue="${this.book?.publish_date || ''}"
           placeholder="e.g., 2021"
           min="1000"
           max="${new Date().getFullYear()}"
@@ -193,6 +214,9 @@ export class SearchBook extends LitElement {
           id="isbn"
           type="text"
           name="isbn"
+          .defaultValue="${this.book?.identifiers?.isbn_10
+            ? this.book?.identifiers?.isbn_10
+            : this.book?.identifiers?.isbn_13 || ''}"
           placeholder="ISBN 10 or ISBN 13"
           minlength="10"
           maxlength="13"
@@ -255,10 +279,39 @@ export class SearchBook extends LitElement {
         <button-bks
           type="submit"
           label="Submit"
-          ?disabled=${!this.isFormSubmitable()}
+          ?disabled=${!this.isFormSubmitable('form')}
         >
         </button-bks>
       </form>
+    `;
+  }
+
+  get coverTpl() {
+    return html`
+      <div class="cover-container">
+        ${this.book?.cover?.medium
+          ? html`<img
+              src="${this?.book?.cover?.medium}"
+              alt="Book cover"
+              class="book-cover"
+            />`
+          : html`
+              <div class="no-cover-container">
+                <p class="no-cover">No cover available</p>
+              </div>
+            `}
+        <button-bks
+          label="Change Cover"
+          @click=${() => this.shadowRoot.getElementById('cover-upload').click()}
+        ></button-bks>
+        <input
+          id="cover-upload"
+          class="cover-input"
+          type="file"
+          accept="image/*"
+          @change=${this.handleCoverChange}
+        />
+      </div>
     `;
   }
 
@@ -322,8 +375,8 @@ export class SearchBook extends LitElement {
     reader.readAsDataURL(file);
   }
 
-  isFormSubmitable() {
-    const form = this.renderRoot?.querySelector('form');
+  isFormSubmitable(selector) {
+    const form = this.renderRoot?.querySelector(selector);
     return Boolean(form && form.checkValidity());
   }
 
@@ -388,6 +441,22 @@ export class SearchBook extends LitElement {
     this.isbn = e.detail.code ? e.detail.code.trim() : this.isbn.trim();
     if (this.isbn) {
       Router.go(`/book?isbn=${this.isbn}`);
+    }
+  }
+
+  async handleIsbnFormSubmit(e) {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const bookData = Object.fromEntries(formData.entries());
+    const { isbn } = bookData;
+
+    try {
+      const book = await fetchBookByIsbn(isbn);
+      const [firstBook] = Object.values(book);
+      this.book = firstBook;
+      this.showFormNewBook = true;
+    } catch (err) {
+      // this.showNotFound = true;
     }
   }
 }

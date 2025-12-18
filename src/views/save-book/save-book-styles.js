@@ -6,6 +6,8 @@ export const saveBook = [
   css`
     :host {
       display: block;
+      width: 100%;
+      max-width: 1500px;
     }
 
     .intro-container {
@@ -21,7 +23,7 @@ export const saveBook = [
     }
 
     .book-cover {
-      max-width: 300px;
+      max-width: 100px;
       height: auto;
       box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     }

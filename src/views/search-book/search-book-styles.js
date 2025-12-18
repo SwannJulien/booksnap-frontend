@@ -6,7 +6,8 @@ export const searchBook = [
   css`
     :host {
       display: block;
-      max-width: 1200px;
+      width: 100%;
+      max-width: 1500px;
     }
 
     .tabs {
@@ -32,14 +33,20 @@ export const searchBook = [
       color: var(--clr-accent);
     }
 
-    .input-field {
+    .create-book-form:not([hidden]) {
+      display: grid;
+      grid-template-columns: 15% 50%;
+      gap: 1em;
+      align-items: center;
+
+      @media (max-width: 75rem) {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .find-by-isbn-form:not([hidden]) {
       display: flex;
       flex-direction: column;
-      gap: 1em;
-
-      input {
-        max-width: 30rem;
-      }
     }
 
     .modal {
@@ -86,16 +93,19 @@ export const searchBook = [
       margin-inline: auto;
     }
 
-    .cover-wrapper {
+    .cover-container {
       display: flex;
+      flex-direction: column;
+      grid-column: 2;
 
+      img {
+        width: 150px;
+        height: auto;
+      }
       input {
         opacity: 0;
         width: 0.1px;
         height: 0.1px;
-      }
-      button-bks {
-        margin-top: 0;
       }
     }
 
