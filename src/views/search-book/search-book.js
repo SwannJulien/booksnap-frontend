@@ -8,6 +8,8 @@ import { searchBook } from './search-book-styles.js';
 import { postBook } from '../../api/book.js';
 import { sharedStyles } from '../../shared-styles.js';
 
+import '../../components/spinner-element.js';
+
 export class SearchBook extends LitElement {
   static styles = [searchBook, sharedStyles];
 
@@ -21,6 +23,9 @@ export class SearchBook extends LitElement {
     coverPreview: { type: String },
     isFormHidden: { type: Boolean },
     showFormNewBook: { type: Boolean },
+    isFetching: { type: Boolean },
+    showNotFound: { type: Boolean },
+    isIsbnTabHidden: { type: Boolean },
   };
 
   constructor() {
@@ -33,6 +38,9 @@ export class SearchBook extends LitElement {
     this.modalData = null;
     this.isFormHidden = false;
     this.showFormNewBook = false;
+    this.isFetching = false;
+    this.showNotFound = false;
+    this.isIsbnTabHidden = false;
   }
 
   render() {
@@ -46,37 +54,43 @@ export class SearchBook extends LitElement {
   }
 
   get tabsTpl() {
-    return html`  
-        <button
-          class=${this.activeTab === 'scan' ? 'active' : ''}
-          @click=${() => {
-            this.activeTab = 'scan';
-          }}
-        >
-          Scan Barcode
-        </button>
-        <button
-          class=${this.activeTab === 'isbn' ? 'active' : ''}
-          @click=${() => {
-            this.activeTab = 'isbn';
-            this.showFormNewBook = false;
-          }}
-        >
-          Enter ISBN
-        </button>
-        <button
-          class=${this.activeTab === 'form' ? 'active' : ''}
-          @click=${async () => {
-            this.activeTab = 'form';
-            this.book = null;
-            this.coverPreview = undefined;
-            await this.updateComplete;
-            this.renderRoot?.querySelector('.create-book-form')?.reset();
-          }}
-        >
-          Fill Form
-        </button>
-      </div>`;
+    return html`
+      <button
+        class=${this.activeTab === 'scan' ? 'active' : ''}
+        @click=${() => {
+          this.activeTab = 'scan';
+        }}
+      >
+        Scan Barcode
+      </button>
+      <button
+        class=${this.activeTab === 'isbn' ? 'active' : ''}
+        @click=${async () => {
+          this.activeTab = 'isbn';
+          this.showFormNewBook = false;
+          this.isIsbnTabHidden = false;
+          this.showNotFound = false;
+          // clear the bound model value so reset has visible effect
+          this.isbn = '';
+          await this.updateComplete;
+          this.renderRoot?.querySelector('.find-by-isbn-form')?.reset();
+        }}
+      >
+        Enter ISBN
+      </button>
+      <button
+        class=${this.activeTab === 'form' ? 'active' : ''}
+        @click=${async () => {
+          this.activeTab = 'form';
+          this.book = null;
+          this.coverPreview = undefined;
+          await this.updateComplete;
+          this.renderRoot?.querySelector('.create-book-form')?.reset();
+        }}
+      >
+        Fill Form
+      </button>
+    `;
   }
 
   get tabContentTpl() {
@@ -106,33 +120,39 @@ export class SearchBook extends LitElement {
   get isbnTabTpl() {
     return html`
       <h2 class="card-title">
-        Enter your book's ISBN here to get its details automatically
+        ${this.showFormNewBook
+          ? 'Review the book details and make any necessary corrections before submit'
+          : "Enter your book's ISBN here to get its details automatically"}
       </h2>
-      <form
-        class="find-by-isbn-form"
-        ?hidden=${this.showFormNewBook}
-        @submit=${this.handleIsbnFormSubmit}
-      >
-        <input
-          type="text"
-          id="isbnInput"
-          name="isbn"
-          .value=${this.isbn}
-          placeholder="Enter ISBN here"
-          minlength="10"
-          maxlength="13"
-          pattern="\\d{10}(\\d{3})?"
-          required
-          @input=${e => {
-            this.isbn = e.target.value;
-          }}
-        />
-        <button-bks
-          type="submit"
-          label="Submit ISBN"
-          ?disabled=${!this.isFormSubmitable('.find-by-isbn-form')}
-        ></button-bks>
-      </form>
+      ${this.isFetching
+        ? html`<spinner-element></spinner-element>`
+        : html`
+            <form
+              class="find-by-isbn-form"
+              ?hidden=${this.isIsbnTabHidden}
+              @submit=${this.handleIsbnFormSubmit}
+            >
+              <input
+                type="text"
+                id="isbnInput"
+                name="isbn"
+                .value=${this.isbn}
+                placeholder="Enter ISBN here"
+                minlength="10"
+                maxlength="13"
+                pattern="\\d{10}(\\d{3})?"
+                required
+                @input=${e => {
+                  this.isbn = e.target.value;
+                }}
+              />
+              <button-bks
+                type="submit"
+                label="Submit ISBN"
+                ?disabled=${!this.isFormSubmitable('.find-by-isbn-form')}
+              ></button-bks>
+            </form>
+          `}
       ${this.showFormNewBook ? this.newBookForm : ''}
     `;
   }
@@ -142,164 +162,151 @@ export class SearchBook extends LitElement {
     // like a modal, to be able to see it in bigger if needed.x
     return html`
       <h2 class="card-title">Fill in the book details</h2>
-      ${this.coverPreview
-        ? html`<div class="cover-preview-container">
-            <img
-              src="${this.coverPreview}"
-              alt="Cover preview"
-              class="cover-preview"
-            />
-          </div>`
-        : ''}
       ${this.newBookForm}
     `;
   }
 
   get newBookForm() {
     return html`
-      ${this.coverTpl}
-      <form
-        class="create-book-form"
-        ?hidden=${this.isFormHidden}
-        @submit=${this.handleFormSubmit}
-      >
-        <label for="title">Title</label>
-        <input
-          id="title"
-          type="text"
-          name="title"
-          .defaultValue="${this.book?.title || ''}"
-          placeholder="Book title"
-          pattern="^[A-Za-z0-9&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
-          required
-          @input=${() => this.requestUpdate()}
-        />
+      ${this.isFetching
+        ? html`<spinner-element></spinner-element>`
+        : html`
+            ${this.coverTpl}
+            <form
+              class="create-book-form"
+              ?hidden=${this.isFormHidden}
+              @submit=${this.handleFormSubmit}
+            >
+              <label for="title">Title</label>
+              <input
+                id="title"
+                type="text"
+                name="title"
+                .defaultValue="${this.book?.title || ''}"
+                placeholder="Book title"
+                pattern="^[A-Za-z0-9&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
+                required
+                @input=${() => this.requestUpdate()}
+              />
 
-        <label for="author">Author</label>
-        <input
-          id="author"
-          type="text"
-          name="author"
-          .defaultValue="${this.book?.authors
-            ?.map(author => author.name)
-            .join(', ') || ''}"
-          placeholder="Comma separated authors"
-          pattern="^[\\p{L}\\p{M}\\s\\-.'\\(\\),]{1,500}$"
-          required
-          @input=${() => this.requestUpdate()}
-        />
+              <label for="author">Author</label>
+              <input
+                id="author"
+                type="text"
+                name="author"
+                .defaultValue="${this.book?.authors
+                  ?.map(author => author.name)
+                  .join(', ') || ''}"
+                placeholder="Comma separated authors"
+                pattern="^[\\p{L}\\p{M}\\s\\-.'\\(\\),]{1,500}$"
+                required
+                @input=${() => this.requestUpdate()}
+              />
 
-        <label for="publishingYear">Publish Year</label>
-        <input
-          id="publishingYear"
-          type="number"
-          name="publishingYear"
-          .defaultValue="${this.book?.publish_date || ''}"
-          placeholder="e.g., 2021"
-          min="1000"
-          max="${new Date().getFullYear()}"
-        />
+              <label for="publishingYear">Publish Year</label>
+              <input
+                id="publishingYear"
+                type="number"
+                name="publishingYear"
+                .defaultValue="${this.book?.publish_date || ''}"
+                placeholder="e.g., 2021"
+                min="1000"
+                max="${new Date().getFullYear()}"
+              />
 
-        <label for="publisher">Publisher</label>
-        <input
-          id="publisher"
-          type="text"
-          name="publisher"
-          placeholder="Publisher name"
-          pattern="^[&#92;p{L}&#92;p{N}&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
-        />
+              <label for="publisher">Publisher</label>
+              <input
+                id="publisher"
+                type="text"
+                name="publisher"
+                placeholder="Publisher name"
+                pattern="^[&#92;p{L}&#92;p{N}&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
+              />
 
-        <label for="isbn">ISBN</label>
-        <input
-          id="isbn"
-          type="text"
-          name="isbn"
-          .defaultValue="${this.book?.identifiers?.isbn_10
-            ? this.book?.identifiers?.isbn_10
-            : this.book?.identifiers?.isbn_13 || ''}"
-          placeholder="ISBN 10 or ISBN 13"
-          minlength="10"
-          maxlength="13"
-          pattern="\\d{10}(\\d{3})?"
-          required
-          @input=${() => this.requestUpdate()}
-        />
+              <label for="isbn">ISBN</label>
+              <input
+                id="isbn"
+                type="text"
+                name="isbn"
+                .defaultValue="${this.book?.identifiers?.isbn_10
+                  ? this.book?.identifiers?.isbn_10
+                  : this.book?.identifiers?.isbn_13 || ''}"
+                placeholder="ISBN 10 or ISBN 13"
+                minlength="10"
+                maxlength="13"
+                pattern="\\d{10}(\\d{3})?"
+                required
+                @input=${() => this.requestUpdate()}
+              />
 
-        <label for="isFiction">Book type</label>
-        <select
-          id="type"
-          name="isFiction"
-          required
-          @input=${() => this.requestUpdate()}
-        >
-          <option value="" disabled selected hidden>Select book type</option>
-          <option value="true">Fiction</option>
-          <option value="false">Non-fiction</option>
-        </select>
+              <label for="isFiction">Book type</label>
+              <select
+                id="type"
+                name="isFiction"
+                required
+                @input=${() => this.requestUpdate()}
+              >
+                <option value="" disabled selected hidden>
+                  Select book type
+                </option>
+                <option value="true">Fiction</option>
+                <option value="false">Non-fiction</option>
+              </select>
 
-        <label for="numberOfPages">Number of pages</label>
-        <input
-          id="numberOfPages"
-          type="number"
-          name="numberOfPages"
-          placeholder="e.g., 350"
-          min="1"
-          max="99999"
-        />
+              <label for="numberOfPages">Number of pages</label>
+              <input
+                id="numberOfPages"
+                type="number"
+                name="numberOfPages"
+                placeholder="e.g., 350"
+                min="1"
+                max="99999"
+              />
 
-        <label for="yearRecommendation">Year recommendation</label>
-        <select id="yearRecommendation" name="yearRecommendation">
-          <option value="" disabled selected hidden>
-            Select age recommendation
-          </option>
-          <option value="pre school">Pre-school</option>
-          <option value="1">year 1</option>
-          <option value="2">year 2</option>
-          <option value="3">year 3</option>
-          <option value="4">year 4</option>
-          <option value="5">year 5</option>
-          <option value="6">year 6</option>
-          <option value="7">year 7</option>
-          <option value="8">year 8</option>
-          <option value="9">year 9</option>
-          <option value="10">year 10</option>
-          <option value="11">year 11</option>
-          <option value="12">year 12</option>
-          <option value="13">year 13</option>
-        </select>
+              <label for="yearRecommendation">Year recommendation</label>
+              <select id="yearRecommendation" name="yearRecommendation">
+                <option value="" disabled selected hidden>
+                  Select age recommendation
+                </option>
+                <option value="pre school">Pre-school</option>
+                <option value="1">year 1</option>
+                <option value="2">year 2</option>
+                <option value="3">year 3</option>
+                <option value="4">year 4</option>
+                <option value="5">year 5</option>
+                <option value="6">year 6</option>
+                <option value="7">year 7</option>
+                <option value="8">year 8</option>
+                <option value="9">year 9</option>
+                <option value="10">year 10</option>
+                <option value="11">year 11</option>
+                <option value="12">year 12</option>
+                <option value="13">year 13</option>
+              </select>
 
-        <label for="genres">Genres</label>
-        <input
-          id="genres"
-          type="text"
-          name="genres"
-          placeholder="Comma separated genres"
-          pattern="^[\\p{L}\\p{N}\\s\\-',.]{1,500}$"
-        />
-        <button-bks
-          type="submit"
-          label="Submit"
-          ?disabled=${!this.isFormSubmitable('form')}
-        >
-        </button-bks>
-      </form>
+              <label for="genres">Genres</label>
+              <input
+                id="genres"
+                type="text"
+                name="genres"
+                placeholder="Comma separated genres"
+                pattern="^[\\p{L}\\p{N}\\s\\-',.]{1,500}$"
+              />
+              <button-bks
+                type="submit"
+                label="Submit"
+                ?disabled=${!this.isFormSubmitable('form')}
+              >
+              </button-bks>
+            </form>
+          `}
     `;
   }
 
   get coverTpl() {
     return html`
       <div class="cover-container">
-        ${this.book?.cover?.medium
-          ? html`<img
-              src="${this?.book?.cover?.medium}"
-              alt="Book cover"
-              class="book-cover"
-            />`
-          : html`
-              <div class="no-cover-container">
-                <p class="no-cover">No cover available</p>
-              </div>
-            `}
+        ${this.displayCover()}
         <button-bks
           label="Change Cover"
           @click=${() => this.shadowRoot.getElementById('cover-upload').click()}
@@ -373,6 +380,32 @@ export class SearchBook extends LitElement {
       this.requestUpdate();
     };
     reader.readAsDataURL(file);
+  }
+
+  displayCover() {
+    if (this.book?.cover?.medium) {
+      return html`
+        <img
+          src="${this.book.cover.medium}"
+          alt="Book cover preview"
+          class="cover-preview"
+        />
+      `;
+    }
+    if (this.coverPreview) {
+      return html`
+        <img
+          src="${this.coverPreview}"
+          alt="Book cover preview"
+          class="cover-preview"
+        />
+      `;
+    }
+    return html`
+      <div class="no-cover-container cover-preview">
+        <p class="no-cover">No cover available</p>
+      </div>
+    `;
   }
 
   isFormSubmitable(selector) {
@@ -450,13 +483,19 @@ export class SearchBook extends LitElement {
     const bookData = Object.fromEntries(formData.entries());
     const { isbn } = bookData;
 
+    this.isFetching = true;
+    this.showNotFound = false;
+    this.isIsbnTabHidden = true;
     try {
       const book = await fetchBookByIsbn(isbn);
       const [firstBook] = Object.values(book);
       this.book = firstBook;
       this.showFormNewBook = true;
     } catch (err) {
-      // this.showNotFound = true;
+      this.showNotFound = true;
+    } finally {
+      this.isFetching = false;
+      this.requestUpdate();
     }
   }
 }

@@ -99,7 +99,7 @@ export const searchBook = [
       grid-column: 2;
 
       img {
-        width: 150px;
+        width: 120px;
         height: auto;
       }
       input {
@@ -107,11 +107,6 @@ export const searchBook = [
         width: 0.1px;
         height: 0.1px;
       }
-    }
-
-    .cover-preview-container {
-      display: flex;
-      justify-content: center;
     }
 
     .cover-preview {
@@ -124,6 +119,19 @@ export const searchBook = [
       border: 1px solid rgba(0, 0, 0, 0.08);
       object-fit: cover;
       display: block;
+    }
+
+    .no-cover-container {
+      display: flex;
+      padding: 1rem;
+      width: 100px;
+      height: 150px;
+      background-color: gray;
+    }
+
+    .no-cover {
+      align-content: center;
+      text-align: center;
     }
 
     @media print {

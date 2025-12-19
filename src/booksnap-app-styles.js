@@ -212,5 +212,12 @@ export const booksnapApp = [
           0 0;
       }
     }
+
+    // prevents printing the navbar when printing copy qr code
+    @media print {
+      #sidebar {
+        display: none !important;
+      }
+    }
   `,
 ];
