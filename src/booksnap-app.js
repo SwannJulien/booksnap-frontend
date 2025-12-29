@@ -3,7 +3,6 @@ import { LitElement, html } from 'lit';
 
 import { booksnapApp } from './booksnap-app-styles.js';
 import './components/barecode-scanner/barecode-scanner.js';
-import './views/save-book/save-book.js';
 import './views/home-view/home-view.js';
 import './views/search-book/search-book.js';
 
@@ -43,21 +42,6 @@ class BooksnapApp extends LitElement {
           });
           linkItems.forEach(element => {
             if (element.getAttribute('href') === '/search') {
-              element.parentElement.classList.add('active');
-            }
-          });
-        },
-      },
-      {
-        path: '/book',
-        component: 'save-book',
-        action: async () => {
-          await import('./views/save-book/save-book.js');
-          listItems.forEach(item => {
-            item.classList.remove('active');
-          });
-          linkItems.forEach(element => {
-            if (element.getAttribute('href') === '/book') {
               element.parentElement.classList.add('active');
             }
           });

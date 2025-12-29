@@ -1,13 +1,10 @@
-import { Router } from '@vaadin/router';
 import { LitElement, html } from 'lit';
 import '../../components/barecode-scanner/barecode-scanner.js';
-import '../save-book/save-book.js';
 import '../../components/button-bks/button-bks.js';
 import { fetchBookByIsbn } from '../../api/openLibrary.js';
 import { searchBook } from './search-book-styles.js';
 import { postBook } from '../../api/book.js';
 import { sharedStyles } from '../../shared-styles.js';
-
 import '../../components/spinner-element.js';
 
 export class SearchBook extends LitElement {
@@ -26,6 +23,7 @@ export class SearchBook extends LitElement {
     isFetching: { type: Boolean },
     showNotFound: { type: Boolean },
     isIsbnTabHidden: { type: Boolean },
+    isBarecodeScannerHidden: { type: Boolean },
   };
 
   constructor() {
@@ -41,6 +39,7 @@ export class SearchBook extends LitElement {
     this.isFetching = false;
     this.showNotFound = false;
     this.isIsbnTabHidden = false;
+    this.isBarecodeScannerHidden = false;
   }
 
   render() {
@@ -57,8 +56,12 @@ export class SearchBook extends LitElement {
     return html`
       <button
         class=${this.activeTab === 'scan' ? 'active' : ''}
-        @click=${() => {
+        @click=${async () => {
           this.activeTab = 'scan';
+          this.showFormNewBook = false;
+          this.isBarecodeScannerHidden = false;
+          this.isbn = '';
+          await this.updateComplete;
         }}
       >
         Scan Barcode
@@ -70,7 +73,6 @@ export class SearchBook extends LitElement {
           this.showFormNewBook = false;
           this.isIsbnTabHidden = false;
           this.showNotFound = false;
-          // clear the bound model value so reset has visible effect
           this.isbn = '';
           await this.updateComplete;
           this.renderRoot?.querySelector('.find-by-isbn-form')?.reset();
@@ -109,11 +111,18 @@ export class SearchBook extends LitElement {
   get scanTabTpl() {
     return html`
       <h2 class="card-title">
-        Scan your book's barecode to get its details automatically
+        ${this.showFormNewBook
+          ? 'Review the book details and make any necessary corrections before submit'
+          : "Scan your book's barecode to get its details automatically"}
       </h2>
-      <barecode-scanner
-        @sendBarecode=${this.handleIsbnScanAndInput}
-      ></barecode-scanner>
+
+      ${this.isFetching
+        ? html`<spinner-element></spinner-element>`
+        : html` <barecode-scanner
+            ?hidden=${this.isBarecodeScannerHidden}
+            @sendBarecode=${this.handleIsbnScanAndInput}
+          ></barecode-scanner>`}
+      ${this.showFormNewBook ? this.newBookForm : ''}
     `;
   }
 
@@ -184,7 +193,7 @@ export class SearchBook extends LitElement {
                 name="title"
                 .defaultValue="${this.book?.title || ''}"
                 placeholder="Book title"
-                pattern="^[A-Za-z0-9&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
+                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s\\-:',.!?&amp;()]{1,255}$"
                 required
                 @input=${() => this.requestUpdate()}
               />
@@ -198,7 +207,7 @@ export class SearchBook extends LitElement {
                   ?.map(author => author.name)
                   .join(', ') || ''}"
                 placeholder="Comma separated authors"
-                pattern="^[\\p{L}\\p{M}\\s\\-.'\\(\\),]{1,500}$"
+                pattern="^[A-Za-z\\u00C0-\\u017F\\s\\-.'(),]{1,500}$"
                 required
                 @input=${() => this.requestUpdate()}
               />
@@ -220,7 +229,7 @@ export class SearchBook extends LitElement {
                 type="text"
                 name="publisher"
                 placeholder="Publisher name"
-                pattern="^[&#92;p{L}&#92;p{N}&#92;s&#92;-:',.!?&amp;&#92;(&#92;)]{1,255}$"
+                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s\\-:',.!?&amp;()]{1,255}$"
               />
 
               <label for="isbn">ISBN</label>
@@ -290,12 +299,12 @@ export class SearchBook extends LitElement {
                 type="text"
                 name="genres"
                 placeholder="Comma separated genres"
-                pattern="^[\\p{L}\\p{N}\\s\\-',.]{1,500}$"
+                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s\\-,.' ]{1,500}$"
               />
               <button-bks
                 type="submit"
                 label="Submit"
-                ?disabled=${!this.isFormSubmitable('form')}
+                ?disabled=${!this.isFormSubmitable('.create-book-form')}
               >
               </button-bks>
             </form>
@@ -472,8 +481,18 @@ export class SearchBook extends LitElement {
 
   async handleIsbnScanAndInput(e) {
     this.isbn = e.detail.code ? e.detail.code.trim() : this.isbn.trim();
-    if (this.isbn) {
-      Router.go(`/book?isbn=${this.isbn}`);
+    this.isFetching = true;
+    this.isBarecodeScannerHidden = true;
+    try {
+      const book = await fetchBookByIsbn(this.isbn);
+      const [firstBook] = Object.values(book);
+      this.book = firstBook;
+      this.showFormNewBook = true;
+    } catch (err) {
+      console.error(err);
+    } finally {
+      this.isFetching = false;
+      this.requestUpdate();
     }
   }
 
