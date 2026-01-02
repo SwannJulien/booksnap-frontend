@@ -18,6 +18,7 @@ export class SearchBook extends LitElement {
     modalType: { type: String },
     modalData: { type: Object },
     coverPreview: { type: String },
+    isCoverLoading: { type: Boolean },
     isFormHidden: { type: Boolean },
     showFormNewBook: { type: Boolean },
     isFetching: { type: Boolean },
@@ -40,6 +41,7 @@ export class SearchBook extends LitElement {
     this.showNotFound = false;
     this.isIsbnTabHidden = false;
     this.isBarecodeScannerHidden = false;
+    this.isCoverLoading = false;
   }
 
   render() {
@@ -86,6 +88,7 @@ export class SearchBook extends LitElement {
           this.activeTab = 'form';
           this.book = null;
           this.coverPreview = undefined;
+          this.isCoverLoading = false;
           await this.updateComplete;
           this.renderRoot?.querySelector('.create-book-form')?.reset();
         }}
@@ -380,12 +383,20 @@ export class SearchBook extends LitElement {
     const file = input.files && input.files[0];
     if (!file) {
       this.coverPreview = undefined;
+      this.isCoverLoading = false;
       return;
     }
 
     const reader = new FileReader();
+    // mark loading before starting to read so template shows spinner until <img> loads
+    this.isCoverLoading = true;
     reader.onload = () => {
       this.coverPreview = reader.result;
+      this.requestUpdate();
+    };
+    reader.onerror = () => {
+      this.coverPreview = undefined;
+      this.isCoverLoading = false;
       this.requestUpdate();
     };
     reader.readAsDataURL(file);
@@ -394,20 +405,37 @@ export class SearchBook extends LitElement {
   displayCover() {
     if (this.book?.cover?.medium) {
       return html`
-        <img
-          src="${this.book.cover.medium}"
-          alt="Book cover preview"
-          class="cover-preview"
-        />
+        <div class="cover-wrapper">
+          ${this.isCoverLoading
+            ? html`<spinner-element></spinner-element>`
+            : ''}
+          <img
+            src="${this.book.cover.medium}"
+            alt="Book cover preview"
+            class="cover-preview"
+            style="${this.isCoverLoading ? 'visibility:hidden' : ''}"
+            @load=${this.handleCoverLoaded}
+            @error=${this.handleCoverError}
+          />
+        </div>
       `;
     }
+
     if (this.coverPreview) {
       return html`
-        <img
-          src="${this.coverPreview}"
-          alt="Book cover preview"
-          class="cover-preview"
-        />
+        <div class="cover-wrapper">
+          ${this.isCoverLoading
+            ? html`<spinner-element></spinner-element>`
+            : ''}
+          <img
+            src="${this.coverPreview}"
+            alt="Book cover preview"
+            class="cover-preview"
+            style="${this.isCoverLoading ? 'visibility:hidden' : ''}"
+            @load=${this.handleCoverLoaded}
+            @error=${this.handleCoverError}
+          />
+        </div>
       `;
     }
     return html`
@@ -487,6 +515,7 @@ export class SearchBook extends LitElement {
       const book = await fetchBookByIsbn(this.isbn);
       const [firstBook] = Object.values(book);
       this.book = firstBook;
+      this.isCoverLoading = Boolean(firstBook?.cover?.medium);
       this.showFormNewBook = true;
     } catch (err) {
       console.error(err);
@@ -509,6 +538,7 @@ export class SearchBook extends LitElement {
       const book = await fetchBookByIsbn(isbn);
       const [firstBook] = Object.values(book);
       this.book = firstBook;
+      this.isCoverLoading = Boolean(firstBook?.cover?.medium);
       this.showFormNewBook = true;
     } catch (err) {
       this.showNotFound = true;
@@ -516,6 +546,22 @@ export class SearchBook extends LitElement {
       this.isFetching = false;
       this.requestUpdate();
     }
+  }
+
+  handleCoverLoaded() {
+    this.isCoverLoading = false;
+    this.requestUpdate();
+  }
+
+  handleCoverError() {
+    this.isCoverLoading = false;
+    // if remote cover failed to load, keep coverPreview undefined
+    if (this.coverPreview) {
+      // nothing to do; preview may still exist
+    } else if (this.book?.cover) {
+      this.book.cover = undefined;
+    }
+    this.requestUpdate();
   }
 }
 
