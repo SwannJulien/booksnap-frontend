@@ -33,7 +33,8 @@
       "prettier"
     ],
     "rules": {
-      "class-methods-use-this": "off"
+      "class-methods-use-this": "off",
+      "lit/attribute-value-entities": "off"
     }
   },
   "prettier": {

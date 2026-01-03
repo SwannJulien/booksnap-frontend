@@ -49,4 +49,10 @@ export const sharedStyles = css`
   input:focus {
     outline: none;
   }
+
+  @media print {
+    #sidebar {
+      display: none !important;
+    }
+  }
 `;

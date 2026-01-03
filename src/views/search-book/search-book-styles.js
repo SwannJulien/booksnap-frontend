@@ -62,12 +62,13 @@ export const searchBook = [
       flex-direction: column;
       padding: 1rem;
       width: 30rem;
-      height: 22rem;
+      height: 27rem;
       border-radius: var(--border-radius-default);
       background-color: var(--clr-text-light);
       color: var(--clr-dark-secondary);
 
-      h2 {
+      h2,
+      p {
         text-align: center;
       }
     }
@@ -158,7 +159,7 @@ export const searchBook = [
         justify-content: center;
       }
 
-      .modal-content > *:not(.qr-code) {
+      .modal-content > *:not(.qr-code, p) {
         display: none !important;
       }
 

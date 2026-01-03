@@ -196,7 +196,7 @@ export class SearchBook extends LitElement {
                 name="title"
                 .defaultValue="${this.book?.title || ''}"
                 placeholder="Book title"
-                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s\\-:',.!?&amp;()]{1,255}$"
+                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s:',.!?&\\(\\)\\-]{1,255}$"
                 required
                 @input=${() => this.requestUpdate()}
               />
@@ -210,7 +210,7 @@ export class SearchBook extends LitElement {
                   ?.map(author => author.name)
                   .join(', ') || ''}"
                 placeholder="Comma separated authors"
-                pattern="^[A-Za-z\\u00C0-\\u017F\\s\\-.'(),]{1,500}$"
+                pattern="^[A-Za-z\\u00C0-\\u017F\\s.,'\\(\\)\\-]{1,500}$"
                 required
                 @input=${() => this.requestUpdate()}
               />
@@ -232,7 +232,7 @@ export class SearchBook extends LitElement {
                 type="text"
                 name="publisher"
                 placeholder="Publisher name"
-                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s\\-:',.!?&amp;()]{1,255}$"
+                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s:',.!?&\\(\\)\\-]{1,255}$"
               />
 
               <label for="isbn">ISBN</label>
@@ -302,7 +302,7 @@ export class SearchBook extends LitElement {
                 type="text"
                 name="genres"
                 placeholder="Comma separated genres"
-                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s\\-,.' ]{1,500}$"
+                pattern="^[A-Za-z0-9\\u00C0-\\u017F\\s,.' \\-]{1,500}$"
               />
               <button-bks
                 type="submit"
@@ -362,6 +362,7 @@ export class SearchBook extends LitElement {
         alt="QR Code"
         class="qr-code"
       />
+      <p>${this.book?.title || ''}</p>
       <button-bks
         class="print-btn"
         label="Print QR Code"
